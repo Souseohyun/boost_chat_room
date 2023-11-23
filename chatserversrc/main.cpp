@@ -2,9 +2,12 @@
 #include<stdlib.h>
 #include<cstring>
 #include<unistd.h>
+#include<boost/asio.hpp>
 
 #include"../utils/Daemon.hpp"
 #include"../base/ConfigFileReader.hpp"
+#include"../base/Singleton.hpp"
+#include"../chatserversrc/ChatServer.hpp"
 
 int main(int argc,char* argv[]){
 
@@ -32,6 +35,12 @@ int main(int argc,char* argv[]){
 
     //std::cout<<listenIP<<"  "<<listenport<<std::endl;
 
-    
-
+    boost::asio::io_context ioc;
+    std::unique_ptr<boost::asio::io_context::work>pwork{
+        new boost::asio::io_context::work(ioc)
+    };
+    ChatServer chatServer(ioc,23610);
+    pwork.reset();
+    ioc.run();
+    return 0;
 }

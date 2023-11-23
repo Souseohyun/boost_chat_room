@@ -1,5 +1,6 @@
-CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.o: \
-  /home/seohyun/mychat/MychatServer/chatserversrc/main.cpp \
+CMakeFiles/MychatServer.dir/chatserversrc/ChatSession.cpp.o: \
+  /home/seohyun/mychat/MychatServer/chatserversrc/ChatSession.cpp \
+  /home/seohyun/mychat/MychatServer/chatserversrc/ChatSession.hpp \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/iostream \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/x86_64-linux-gnu/c++/11/bits/c++config.h \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
@@ -165,16 +166,7 @@ CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.o: \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/ostream.tcc \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/istream \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/istream.tcc \
-  /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/stdlib.h \
-  /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/cstring \
-  /usr/include/string.h /usr/include/strings.h /usr/include/unistd.h \
-  /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
-  /usr/include/x86_64-linux-gnu/bits/environments.h \
-  /usr/include/x86_64-linux-gnu/bits/confname.h \
-  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
-  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
-  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
-  /usr/include/linux/close_range.h /usr/include/boost/asio.hpp \
+  /usr/include/boost/asio.hpp \
   /usr/include/boost/asio/associated_allocator.hpp \
   /usr/include/boost/asio/detail/config.hpp \
   /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp \
@@ -182,7 +174,14 @@ CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.o: \
   /usr/include/boost/config/compiler/clang.hpp \
   /usr/include/boost/config/detail/select_stdlib_config.hpp \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/version \
-  /usr/include/boost/config/stdlib/libstdcpp3.hpp \
+  /usr/include/boost/config/stdlib/libstdcpp3.hpp /usr/include/unistd.h \
+  /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
+  /usr/include/x86_64-linux-gnu/bits/environments.h \
+  /usr/include/x86_64-linux-gnu/bits/confname.h \
+  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
+  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
+  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
+  /usr/include/linux/close_range.h \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/memory_resource \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/shared_mutex \
   /usr/include/boost/config/detail/select_platform_config.hpp \
@@ -327,6 +326,8 @@ CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.o: \
   /usr/include/boost/system/detail/config.hpp \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/functional \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/std_function.h \
+  /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/cstring \
+  /usr/include/string.h /usr/include/strings.h \
   /usr/include/boost/cerrno.hpp \
   /usr/include/boost/system/detail/generic_category.hpp \
   /usr/include/boost/system/detail/system_category_posix.hpp \
@@ -1148,17 +1149,4 @@ CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.o: \
   /usr/include/boost/asio/windows/random_access_handle.hpp \
   /usr/include/boost/asio/windows/stream_handle.hpp \
   /usr/include/boost/asio/write_at.hpp \
-  /usr/include/boost/asio/impl/write_at.hpp \
-  /home/seohyun/mychat/MychatServer/chatserversrc/../utils/Daemon.hpp \
-  /home/seohyun/mychat/MychatServer/chatserversrc/../base/ConfigFileReader.hpp \
-  /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/fstream \
-  /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/codecvt.h \
-  /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
-  /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/x86_64-linux-gnu/c++/11/bits/c++io.h \
-  /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/fstream.tcc \
-  /home/seohyun/mychat/MychatServer/chatserversrc/../base/Singleton.hpp \
-  /home/seohyun/mychat/MychatServer/chatserversrc/../chatserversrc/ChatServer.hpp \
-  /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/list \
-  /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_list.h \
-  /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/list.tcc \
-  /home/seohyun/mychat/MychatServer/chatserversrc/./ChatSession.hpp
+  /usr/include/boost/asio/impl/write_at.hpp

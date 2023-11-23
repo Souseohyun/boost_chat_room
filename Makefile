@@ -153,6 +153,54 @@ base/ConfigFileReader.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/base/ConfigFileReader.cpp.s
 .PHONY : base/ConfigFileReader.cpp.s
 
+chatserversrc/ChatServer.o: chatserversrc/ChatServer.cpp.o
+.PHONY : chatserversrc/ChatServer.o
+
+# target to build an object file
+chatserversrc/ChatServer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/ChatServer.cpp.o
+.PHONY : chatserversrc/ChatServer.cpp.o
+
+chatserversrc/ChatServer.i: chatserversrc/ChatServer.cpp.i
+.PHONY : chatserversrc/ChatServer.i
+
+# target to preprocess a source file
+chatserversrc/ChatServer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/ChatServer.cpp.i
+.PHONY : chatserversrc/ChatServer.cpp.i
+
+chatserversrc/ChatServer.s: chatserversrc/ChatServer.cpp.s
+.PHONY : chatserversrc/ChatServer.s
+
+# target to generate assembly for a file
+chatserversrc/ChatServer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/ChatServer.cpp.s
+.PHONY : chatserversrc/ChatServer.cpp.s
+
+chatserversrc/ChatSession.o: chatserversrc/ChatSession.cpp.o
+.PHONY : chatserversrc/ChatSession.o
+
+# target to build an object file
+chatserversrc/ChatSession.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/ChatSession.cpp.o
+.PHONY : chatserversrc/ChatSession.cpp.o
+
+chatserversrc/ChatSession.i: chatserversrc/ChatSession.cpp.i
+.PHONY : chatserversrc/ChatSession.i
+
+# target to preprocess a source file
+chatserversrc/ChatSession.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/ChatSession.cpp.i
+.PHONY : chatserversrc/ChatSession.cpp.i
+
+chatserversrc/ChatSession.s: chatserversrc/ChatSession.cpp.s
+.PHONY : chatserversrc/ChatSession.s
+
+# target to generate assembly for a file
+chatserversrc/ChatSession.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/ChatSession.cpp.s
+.PHONY : chatserversrc/ChatSession.cpp.s
+
 chatserversrc/main.o: chatserversrc/main.cpp.o
 .PHONY : chatserversrc/main.o
 
@@ -213,6 +261,12 @@ help:
 	@echo "... base/ConfigFileReader.o"
 	@echo "... base/ConfigFileReader.i"
 	@echo "... base/ConfigFileReader.s"
+	@echo "... chatserversrc/ChatServer.o"
+	@echo "... chatserversrc/ChatServer.i"
+	@echo "... chatserversrc/ChatServer.s"
+	@echo "... chatserversrc/ChatSession.o"
+	@echo "... chatserversrc/ChatSession.i"
+	@echo "... chatserversrc/ChatSession.s"
 	@echo "... chatserversrc/main.o"
 	@echo "... chatserversrc/main.i"
 	@echo "... chatserversrc/main.s"
