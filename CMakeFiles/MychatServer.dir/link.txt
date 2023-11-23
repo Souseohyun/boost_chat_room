@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/MychatServer.dir/base/ConfigFileReader.cpp.o CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.o CMakeFiles/MychatServer.dir/utils/Daemon.cpp.o -o MychatServer 
