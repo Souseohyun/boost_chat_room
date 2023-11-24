@@ -1,12 +1,69 @@
 #include"ChatServer.hpp"
 
-ChatServer::ChatServer(boost::asio::io_context& ioc,std::uint16_t port)
-:acceptor_(ioc,tcp::endpoint(tcp::v4(),port)){
-    this->Run();
+std::mutex ChatServer::serverMutex_;
+std::condition_variable ChatServer::serverCond_;
+bool ChatServer::serverRunning_ = false;
+
+bool ChatServer::Init(const std::string& ip,std::uint16_t port){
+    tcp::endpoint ep(tcp::v4(),port);
+    ep.address(boost::asio::ip::address::from_string(ip));
+    acceptor_.open(tcp::v4());
+    acceptor_.bind(ep);
+    acceptor_.listen();
+    this->Start();
+    return true;
+}
+
+//新建一个线程托管server服务
+void ChatServer::Start(){
+    serverRunning_ = true;
+    this->servThread_ = std::thread(&ChatServer::Run,this);
+}
+
+
+//该函数遗弃，采用Init单例初始化
+ChatServer::ChatServer(/*boost::asio::io_context& ioc,*/std::uint16_t port)
+:acceptor_(GetIOC(),tcp::endpoint(tcp::v4(),port)){
+    //仅初始化
+}
+ChatServer::ChatServer()
+:acceptor_(GetIOC()){
+    //仅初始化
+}
+
+boost::asio::io_context& ChatServer::GetIOC(){
+    static boost::asio::io_context ioc;
+    return ioc;
 }
 
 void ChatServer::Run(){
     this->DoAsyncAccept();
+    //std::cout<<servThread_.get_id()<<std::endl;
+
+
+    //所有异步操作设置完之后再run();
+    GetIOC().run();
+    std::cout<<"run end!"<<std::endl;
+}
+
+void ChatServer::Stop() {
+    // 停止服务器逻辑
+    {
+        std::lock_guard<std::mutex> lock(serverMutex_);
+        serverRunning_ = false;
+    }
+    //notify用于提醒main线程，醒醒，该再检查谓词是否成立了！
+    serverCond_.notify_one();
+    if (servThread_.joinable()) {
+        servThread_.join();
+    }
+}
+
+void ChatServer::WaitForServerToStop(){
+    std::unique_lock<std::mutex> lock(serverMutex_);
+    //带谓词的wait，只有当lambda表达式返回true时才会就继续执行
+    //而start会将状态置true，服务器不调用Stop终止，就不会满足该条件变量
+    serverCond_.wait(lock, []{ return !serverRunning_; });
 }
 
 void ChatServer::DoAsyncAccept(){
