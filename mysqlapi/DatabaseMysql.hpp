@@ -5,7 +5,8 @@
 #include<cppconn/statement.h>
 #include<cppconn/resultset.h>
 
-#define _TEST 1
+//(for check Mysql of init())
+//#define _TEST
 
 class DatabaseMysql{
 public:
