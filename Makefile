@@ -225,6 +225,30 @@ chatserversrc/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.s
 .PHONY : chatserversrc/main.cpp.s
 
+mysqlapi/DatabaseMysql.o: mysqlapi/DatabaseMysql.cpp.o
+.PHONY : mysqlapi/DatabaseMysql.o
+
+# target to build an object file
+mysqlapi/DatabaseMysql.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/mysqlapi/DatabaseMysql.cpp.o
+.PHONY : mysqlapi/DatabaseMysql.cpp.o
+
+mysqlapi/DatabaseMysql.i: mysqlapi/DatabaseMysql.cpp.i
+.PHONY : mysqlapi/DatabaseMysql.i
+
+# target to preprocess a source file
+mysqlapi/DatabaseMysql.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/mysqlapi/DatabaseMysql.cpp.i
+.PHONY : mysqlapi/DatabaseMysql.cpp.i
+
+mysqlapi/DatabaseMysql.s: mysqlapi/DatabaseMysql.cpp.s
+.PHONY : mysqlapi/DatabaseMysql.s
+
+# target to generate assembly for a file
+mysqlapi/DatabaseMysql.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/mysqlapi/DatabaseMysql.cpp.s
+.PHONY : mysqlapi/DatabaseMysql.cpp.s
+
 utils/Daemon.o: utils/Daemon.cpp.o
 .PHONY : utils/Daemon.o
 
@@ -270,6 +294,9 @@ help:
 	@echo "... chatserversrc/main.o"
 	@echo "... chatserversrc/main.i"
 	@echo "... chatserversrc/main.s"
+	@echo "... mysqlapi/DatabaseMysql.o"
+	@echo "... mysqlapi/DatabaseMysql.i"
+	@echo "... mysqlapi/DatabaseMysql.s"
 	@echo "... utils/Daemon.o"
 	@echo "... utils/Daemon.i"
 	@echo "... utils/Daemon.s"

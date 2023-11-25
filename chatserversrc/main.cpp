@@ -9,6 +9,8 @@
 #include"../base/Singleton.hpp"
 #include"../chatserversrc/ChatServer.hpp"
 
+#include"../mysqlapi/DatabaseMysql.hpp"
+
 int main(int argc,char* argv[]){
 
 
@@ -33,6 +35,12 @@ int main(int argc,char* argv[]){
     std::string listenIP = config.GetConfigValue("listenip");
     short listenPort = static_cast<short>(std::stoi(config.GetConfigValue("listenport")));
 
+    //初始化mysql配置
+    std::string mysqlLink = config.GetConfigValue("dblink");
+    std::string mysqlUser = config.GetConfigValue("dbuser");
+    std::string mysqlPwd  = config.GetConfigValue("dbpassworld");
+    std::string mysqlDB   = config.GetConfigValue("dbname");
+    
     //起一个Server会无限期阻塞在Run()，我们可以在中另起一个线程
     /*
       单例设计模式下，父子线程共用一个ChatServer
@@ -43,7 +51,7 @@ int main(int argc,char* argv[]){
     //init()中自含start()。会自启动
     Singleton<ChatServer>::Instance().Init(listenIP,listenPort);
 
-    
+    Singleton<DatabaseMysql>::Instance().Initialize(mysqlLink,mysqlUser,mysqlPwd,mysqlDB);
 
 
     //等待服务器结束

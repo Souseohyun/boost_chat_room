@@ -1161,4 +1161,17 @@ CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.o: \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/list \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_list.h \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/list.tcc \
-  /home/seohyun/mychat/MychatServer/chatserversrc/./ChatSession.hpp
+  /home/seohyun/mychat/MychatServer/chatserversrc/./ChatSession.hpp \
+  /home/seohyun/mychat/MychatServer/chatserversrc/../mysqlapi/DatabaseMysql.hpp \
+  /usr/include/mysql_connection.h /usr/include/cppconn/connection.h \
+  /usr/include/cppconn/build_config.h /usr/include/cppconn/warning.h \
+  /usr/include/cppconn/sqlstring.h /usr/include/cppconn/variant.h \
+  /usr/include/cppconn/exception.h /usr/include/boost/scoped_ptr.hpp \
+  /usr/include/boost/smart_ptr/scoped_ptr.hpp \
+  /usr/include/mysql_driver.h /usr/include/cppconn/driver.h \
+  /usr/include/mysql_error.h /usr/include/cppconn/statement.h \
+  /usr/include/cppconn/config.h \
+  /usr/lib/llvm-14/lib/clang/14.0.0/include/inttypes.h \
+  /usr/include/inttypes.h /usr/include/cppconn/resultset.h \
+  /usr/include/cppconn/resultset_metadata.h \
+  /usr/include/cppconn/datatype.h
