@@ -76,7 +76,8 @@ void ChatServer::DoAsyncAccept(){
                     //尽可能传server的引用形
                     auto pSess = std::make_shared<ChatSession>(socket,*this);
                     this->sessionList_.push_back(pSess);
-                    //pcli->RunMenu();
+                    //初始化（实际目的是验证身份）
+                    pSess->InitializeSession();
                 }else{
                     std::cout<<"accept fail"<<std::endl;
                 }

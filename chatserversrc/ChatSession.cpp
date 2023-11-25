@@ -1,6 +1,102 @@
-#include"ChatSession.hpp"
+//#include"ChatSession.hpp"
+/*万万不可将server.hpp包含在session.hpp中
+  毫无疑问这将引起循环依赖，但我们可以巧妙地利用提前声明和其他办法绕开
+  1-Server类中需要用到Session类方法，
+    我们在Server.hpp中包含Session.hpp文件。
+  2-Session类中也需要用到Server类方法，
+    首先在Session.hpp文件中提前声明class Server;
+    Session.cpp直接引入Server.hpp而不是Session.hpp;
+  这样做的好处：
+    提前声明使得Session.hpp中能出现Server类（虽然不能用具体方法，但谁会在hpp中写具体方法呢？）
+    在后续使用中Session.cpp的编写中，由于引入了Server.hpp
+    Server类得以完整的加载
+*/
+#include"ChatServer.hpp"
 
 ChatSession::ChatSession(tcp::socket& socket,ChatServer& serv)
 :socket_(std::move(socket)),serv_(serv){
-    std::cout<<"it's test----ChatSession Success"<<std::endl;
+    //std::cout<<"it's test----ChatSession Success"<<std::endl;
+    //socket建立成功后开始验证身份逻辑
+    //SendAuthentication();切勿在构造函数中shared_from_this
+    //很容易在构造函数中加载某函数，某函数不自觉使用以上
+
+   
+    
+}
+
+void ChatSession::InitializeSession() {
+    SendAuthentication();
+}
+
+/*
+    身份验证逻辑：
+    1-建立好socket链接后，服务端异步读入数据
+    2-客户机点击登录则主动将框内验证信息发送（账号密码）
+    3-调取数据库查询，验证成功进入会话逻辑，失败中断socket链接
+    (base版本：
+        由于没有写客户端代码，客户机用nc命令代替
+        1-服务器向客户端发送（账号/密码）请求，客户端输入。
+        2-根据账号，服务端查询数据库，没有则提示错误，断开连接。
+        3-有账号，服务端验证密码，正确则进入会话逻辑
+        )
+    */
+void ChatSession::SendAuthentication(){
+    auto self = shared_from_this();
+    socket_.async_write_some(
+        boost::asio::buffer("请输入账号@密码：\n"),
+        [this,self](const boost::system::error_code& ec,std::size_t bytes){
+            if(!ec && bytes!=0){
+                self->ReadAuthentication();
+            }else{
+                self->SendAuthentication();
+            }
+        });
+
+        
+}
+
+//验证信息格式：账号@密码\n（\n发送）
+void ChatSession::ReadAuthentication(){
+    ClearStreambuf();
+    auto self = shared_from_this();
+    boost::asio::async_read_until(socket_,
+        buff_,"\n",[this,self](const boost::system::error_code& ec,std::size_t bytes){
+            if(!ec && bytes!= 0){
+                std::istream ist(&self->buff_);
+                std::string line;
+                //使用 std::getline 函数读取数据时，它会自动读取并丢弃 \n
+                std::getline(ist,line);
+                self->ParseAuthentication(line);
+            }else{
+                std::cerr<<"ReadAuthentication Error "<<ec.value()<<std::endl;
+            }
+        });
+}
+#define _TEST_AUTH
+//解析验证信息
+void ChatSession::ParseAuthentication(std::string& line){
+    //Windows发来的数据换行符是\r\n，getline处理了\n，也许会\r也要处理
+    if(!line.empty() && line.back() == '\r')
+        line.pop_back();
+    //@分割账号密码
+    std::size_t delimiterPos = line.find('@');
+    if(delimiterPos != std::string::npos){
+        std::string usrname = line.substr(0,delimiterPos);
+        std::string pasword = line.substr(delimiterPos+1);
+#ifdef _TEST_AUTH
+        std::cout<<"usr: "<<usrname<<"  password: "<<pasword<<std::endl;
+    
+#endif
+    }
+}
+
+
+void ChatSession::ClearStreambuf(){
+    buff_.consume(buff_.size());
+    
+    /*
+    强制将buff_缓冲区缩小而不是内部管理
+    boost::asio::streambuf::mutable_buffers_type bufs = streambuf.prepare(0);
+    streambuf.commit(0);
+    */
 }

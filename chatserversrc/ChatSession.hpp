@@ -23,6 +23,11 @@ public:
     ChatSession& operator =(const ChatSession& ) = delete;
 
     ChatSession(tcp::socket& ,ChatServer& );
+    void InitializeSession();
+    
+    void SendAuthentication();
+    void ReadAuthentication();
+    void ParseAuthentication(std::string&);
 
-
+    void ClearStreambuf();
 };
