@@ -23,7 +23,7 @@ ChatSession::ChatSession(tcp::socket& socket,ChatServer& serv)
    
     
 }
-
+//绕开构造函数中weak error
 void ChatSession::InitializeSession() {
     SendAuthentication();
 }
@@ -85,10 +85,21 @@ void ChatSession::ParseAuthentication(std::string& line){
         std::string pasword = line.substr(delimiterPos+1);
 #ifdef _TEST_AUTH
         std::cout<<"usr: "<<usrname<<"  password: "<<pasword<<std::endl;
-    
+        //在此处调用server，使用其mysql指针进行核验
+        if(serv_.GetMysql().CheckUserInfo(usrname,pasword)){
+            //往回发送成功登陆，否则反之
+        }else{
+            
+        }
 #endif
     }
 }
+
+
+
+
+
+
 
 
 void ChatSession::ClearStreambuf(){

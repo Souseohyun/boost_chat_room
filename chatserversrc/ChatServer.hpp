@@ -20,6 +20,7 @@ enum CLIENT_TYPE
 #include<boost/asio.hpp>
 
 #include"./ChatSession.hpp"
+#include"../mysqlapi/BoostMysql.hpp"
 
 //已存储用户信息
 struct StoredUserInfo{
@@ -40,8 +41,10 @@ private:
     static bool                             serverRunning_;
     //为每个Session分配在ChatServer范围内唯一一个标识id
     std::atomic_int                         sessionId_;
-    
+    //server独立线程，不妨碍其他逻辑
     std::thread                             servThread_;
+    //ChatServer所用数据库
+    std::unique_ptr<BoostMysql>             servMysql_;
 
 public:
     ChatServer();
@@ -62,11 +65,13 @@ public:
     void   Start();
     void   Stop();  //Stop中手动cond.notify_one()
 
-    //静态成员函数，用于main中等待Server结束
+    //静态成员函数，用于main中等待Server结束，直接通过类名唤起
     static void WaitForServerToStop();
 
     static boost::asio::io_context& GetIOC();
     void Run();
     void DoAsyncAccept();
 
+    void MakeMysql();
+    BoostMysql& GetMysql();
 };

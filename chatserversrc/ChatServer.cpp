@@ -1,5 +1,7 @@
 #include"ChatServer.hpp"
 
+#include"../base/ConfigFileReader.hpp"
+
 std::mutex ChatServer::serverMutex_;
 std::condition_variable ChatServer::serverCond_;
 bool ChatServer::serverRunning_ = false;
@@ -37,13 +39,40 @@ boost::asio::io_context& ChatServer::GetIOC(){
 }
 
 void ChatServer::Run(){
+    this->MakeMysql();
     this->DoAsyncAccept();
     //std::cout<<servThread_.get_id()<<std::endl;
+    /*
+        待填充，所有Server的异步操作，前置准备操作都写这里
+        所有异步操作设置完之后再run();
+    */
+    
+    
+    
 
-
-    //所有异步操作设置完之后再run();
+    
     GetIOC().run();
     std::cout<<"run end!"<<std::endl;
+}
+
+void ChatServer::MakeMysql(){
+    servMysql_ = std::make_unique<BoostMysql>(GetIOC());
+    ConfigFileReader config("./etc/chatserver.conf");
+    std::string mysqlHost = config.GetConfigValue("mysqlhost");
+    std::string mysqlPort = config.GetConfigValue("mysqlport");
+    std::string mysqlUser = config.GetConfigValue("mysqluser");
+    std::string mysqlPwd  = config.GetConfigValue("mysqlpassword");
+    std::string mysqlDB   = config.GetConfigValue("mysqldbname");
+
+    if(!servMysql_->Initialize(mysqlHost,mysqlPort,mysqlUser,mysqlPwd,mysqlDB)){
+        //异常处理已经在函数内部实现，此处仅退出
+        return;
+    }
+}
+
+BoostMysql& ChatServer::GetMysql()
+{
+    return *servMysql_;
 }
 
 void ChatServer::Stop() {

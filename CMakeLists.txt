@@ -5,7 +5,9 @@ cmake_minimum_required(VERSION 3.12)
 project(MychatServer)
 
 # 查找boost库   CMake提供了boost库的“包配置文件”
-find_package(Boost REQUIRED COMPONENTS system thread)
+find_package(Boost REQUIRED COMPONENTS system thread headers)
+find_package(Threads REQUIRED)
+find_package(OpenSSL REQUIRED)
 
 # 查找MySQL客户端库
 find_library(MYSQL_LIB
@@ -49,15 +51,27 @@ set(CMAKE_BUILD_TYPE Debug)
 
 add_executable(${CMAKE_PROJECT_NAME} ${SRC_FILES})
 
-# 链接 Boost 库
-if(Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIRS})
-    target_link_libraries(${CMAKE_PROJECT_NAME} ${Boost_LIBRARIES})
-endif()
+## 链接 Boost 库
+##if(Boost_FOUND)
+##    include_directories(${Boost_INCLUDE_DIRS})
+##    target_link_libraries(${CMAKE_PROJECT_NAME} ${Boost_LIBRARIES})
+##endif()
 
 
 # 链接MySQL客户端库和MySQL Connector/C++库
 include_directories(${MYSQL_INCLUDE_DIR} ${MYSQLCPPCONN_INCLUDE_DIR})
-target_link_libraries(${CMAKE_PROJECT_NAME} ${MYSQL_LIB} ${MYSQLCPPCONN_LIB})
+##target_link_libraries(${CMAKE_PROJECT_NAME} ${MYSQL_LIB} ${MYSQLCPPCONN_LIB})
 
+
+# 链接所有库
+target_link_libraries(${CMAKE_PROJECT_NAME} 
+  PRIVATE 
+  Boost::system 
+  Boost::thread 
+  Threads::Threads 
+  OpenSSL::SSL 
+  OpenSSL::Crypto
+  ${MYSQL_LIB}
+  ${MYSQLCPPCONN_LIB}
+)
 

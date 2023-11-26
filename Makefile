@@ -225,6 +225,30 @@ chatserversrc/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.s
 .PHONY : chatserversrc/main.cpp.s
 
+mysqlapi/BoostMysql.o: mysqlapi/BoostMysql.cpp.o
+.PHONY : mysqlapi/BoostMysql.o
+
+# target to build an object file
+mysqlapi/BoostMysql.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/mysqlapi/BoostMysql.cpp.o
+.PHONY : mysqlapi/BoostMysql.cpp.o
+
+mysqlapi/BoostMysql.i: mysqlapi/BoostMysql.cpp.i
+.PHONY : mysqlapi/BoostMysql.i
+
+# target to preprocess a source file
+mysqlapi/BoostMysql.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/mysqlapi/BoostMysql.cpp.i
+.PHONY : mysqlapi/BoostMysql.cpp.i
+
+mysqlapi/BoostMysql.s: mysqlapi/BoostMysql.cpp.s
+.PHONY : mysqlapi/BoostMysql.s
+
+# target to generate assembly for a file
+mysqlapi/BoostMysql.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/mysqlapi/BoostMysql.cpp.s
+.PHONY : mysqlapi/BoostMysql.cpp.s
+
 mysqlapi/DatabaseMysql.o: mysqlapi/DatabaseMysql.cpp.o
 .PHONY : mysqlapi/DatabaseMysql.o
 
@@ -294,6 +318,9 @@ help:
 	@echo "... chatserversrc/main.o"
 	@echo "... chatserversrc/main.i"
 	@echo "... chatserversrc/main.s"
+	@echo "... mysqlapi/BoostMysql.o"
+	@echo "... mysqlapi/BoostMysql.i"
+	@echo "... mysqlapi/BoostMysql.s"
 	@echo "... mysqlapi/DatabaseMysql.o"
 	@echo "... mysqlapi/DatabaseMysql.i"
 	@echo "... mysqlapi/DatabaseMysql.s"
