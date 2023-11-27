@@ -12,6 +12,7 @@
     Server类得以完整的加载
 */
 #include"ChatServer.hpp"
+#include "ChatSession.hpp"
 
 ChatSession::ChatSession(tcp::socket& socket,ChatServer& serv)
 :socket_(std::move(socket)),serv_(serv){
@@ -23,7 +24,7 @@ ChatSession::ChatSession(tcp::socket& socket,ChatServer& serv)
    
     
 }
-//绕开构造函数中weak error
+//绕开构造函数中weak error，初始化后发送身份验证请求
 void ChatSession::InitializeSession() {
     SendAuthentication();
 }
@@ -40,6 +41,7 @@ void ChatSession::InitializeSession() {
         3-有账号，服务端验证密码，正确则进入会话逻辑
         )
     */
+
 void ChatSession::SendAuthentication(){
     auto self = shared_from_this();
     socket_.async_write_some(
@@ -59,20 +61,25 @@ void ChatSession::SendAuthentication(){
 void ChatSession::ReadAuthentication(){
     ClearStreambuf();
     auto self = shared_from_this();
-    boost::asio::async_read_until(socket_,
-        buff_,"\n",[this,self](const boost::system::error_code& ec,std::size_t bytes){
-            if(!ec && bytes!= 0){
+    boost::asio::async_read_until(socket_, buff_, '\n',
+        [this, self](const boost::system::error_code& ec, std::size_t /*bytes_transferred*/) {
+            if (!ec) {
+                // 数据读取成功，处理数据
                 std::istream ist(&self->buff_);
                 std::string line;
-                //使用 std::getline 函数读取数据时，它会自动读取并丢弃 \n
+                //使用 std::getline 它会读取并丢弃 \n
                 std::getline(ist,line);
-                self->ParseAuthentication(line);
-            }else{
-                std::cerr<<"ReadAuthentication Error "<<ec.value()<<std::endl;
+                ParseAuthentication(line);
+            } else {
+                // 错误处理
             }
-        });
+        }
+    );
+
+    
 }
-#define _TEST_AUTH
+
+
 //解析验证信息
 void ChatSession::ParseAuthentication(std::string& line){
     //Windows发来的数据换行符是\r\n，getline处理了\n，也许会\r也要处理
@@ -83,26 +90,70 @@ void ChatSession::ParseAuthentication(std::string& line){
     if(delimiterPos != std::string::npos){
         std::string usrname = line.substr(0,delimiterPos);
         std::string pasword = line.substr(delimiterPos+1);
-#ifdef _TEST_AUTH
+
         std::cout<<"usr: "<<usrname<<"  password: "<<pasword<<std::endl;
+
         //在此处调用server，使用其mysql指针进行核验
         if(serv_.GetMysql().CheckUserInfo(usrname,pasword)){
             //往回发送成功登陆，否则反之
+            PushMessege("验证通过，登陆成功\n");
+            ListeningFromCli();
         }else{
-            
+            PushMessege("验证失败，断开连接");
+            socket_.close();
+
         }
-#endif
+
     }
+}
+
+void ChatSession::PushMessege(const std::string & msg){
+    auto self = shared_from_this();
+    boost::asio::async_write(self->socket_,boost::asio::buffer(msg),
+    [this,self](const boost::system::error_code& ec,std::size_t bytes){
+        if(!ec && bytes!=0){
+        }else{
+            std::cerr<<"PushMessage error :"<<ec.value()<<std::endl;
+        }
+    });
+}
+
+
+void ChatSession::ListeningFromCli(){
+    auto self = shared_from_this();
+    ClearStreambuf();  // 清空缓冲区
+
+    // 设置预期读取的最大字节数
+    std::size_t buffer_size = 1024;
+
+    // 异步读取数据到streambuf
+    boost::asio::async_read_until(socket_, buff_, '\n',
+        [this, self](const boost::system::error_code& ec, std::size_t /*bytes_transferred*/) {
+            if (!ec) {
+                // 数据读取成功，处理数据
+                std::istream ist(&self->buff_);
+                std::string line;
+                //使用 std::getline 它会读取并丢弃 \n
+                std::getline(ist,line);
+                std::cout<<line<<std::endl;
+                // 继续监听
+                self->ListeningFromCli();
+            } else {
+                // 错误处理
+            }
+        }
+    );
+
+    
 }
 
 
 
 
 
-
-
-
 void ChatSession::ClearStreambuf(){
+
+    
     buff_.consume(buff_.size());
     
     /*

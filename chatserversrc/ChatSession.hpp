@@ -26,9 +26,14 @@ public:
     ChatSession(tcp::socket& ,ChatServer& );
     void InitializeSession();
     
+    //登录身份验证逻辑
     void SendAuthentication();
     void ReadAuthentication();
     void ParseAuthentication(std::string&);
+
+    //站在服务器的角度，对于此会话
+    void ListeningFromCli();
+    void PushMessege(const std::string&);//加上const能直接匹配"hello"
 
     void ClearStreambuf();
 };
