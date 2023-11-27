@@ -6891,6 +6891,7 @@ CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.o: chatserversrc/main.cpp \
   /usr/local/include/boost/mysql/impl/internal/network_algorithms/read_some_rows_dynamic.hpp \
   /usr/local/include/boost/mysql/detail/rebind_executor.hpp \
   /usr/local/include/boost/mysql/detail/throw_on_error_loc.hpp \
+  chatserversrc/TcpServer.hpp \
   mysqlapi/DatabaseMysql.hpp \
   /usr/include/mysql_connection.h \
   /usr/include/cppconn/connection.h \

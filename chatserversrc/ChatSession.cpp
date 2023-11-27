@@ -20,13 +20,29 @@ ChatSession::ChatSession(tcp::socket& socket,ChatServer& serv)
     //socket建立成功后开始验证身份逻辑
     //SendAuthentication();切勿在构造函数中shared_from_this
     //很容易在构造函数中加载某函数，某函数不自觉使用以上
-
+    bLive_ = true;
    
     
 }
 //绕开构造函数中weak error，初始化后发送身份验证请求
 void ChatSession::InitializeSession() {
     SendAuthentication();
+}
+
+void ChatSession::CloseMyself(){
+    serv_.removeSession(shared_from_this());
+    std::lock_guard<std::mutex> lock(sessionMutex_);
+    bLive_ = false;
+}
+
+bool ChatSession::isAlive() const {
+    return bLive_;
+
+/*
+    return std::chrono::duration_cast<std::chrono::seconds>(
+        std::chrono::steady_clock::now() - lastActiveTime_)
+        .count() < heartbeatTimeout_;
+        */
 }
 
 /*
@@ -93,13 +109,13 @@ void ChatSession::ParseAuthentication(std::string& line){
 
         std::cout<<"usr: "<<usrname<<"  password: "<<pasword<<std::endl;
 
-        //在此处调用server，使用其mysql指针进行核验
+        //在此处调用server，使用其mysql()进行核验
         if(serv_.GetMysql().CheckUserInfo(usrname,pasword)){
             //往回发送成功登陆，否则反之
             PushMessege("验证通过，登陆成功\n");
             ListeningFromCli();
         }else{
-            PushMessege("验证失败，断开连接");
+            PushMessege("验证失败，断开连接\n");
             socket_.close();
 
         }
@@ -118,7 +134,10 @@ void ChatSession::PushMessege(const std::string & msg){
     });
 }
 
-
+//该函数目前只支持收发文字，但合理的需求是收发数据包
+//根据数据包的标志位判断这是一条什么样的信息
+//应该由TcpServer accept之后建立一个TcpSession
+//TcpSession做底层数据包的收发判断，是文字，再交付给ChatSession负责
 void ChatSession::ListeningFromCli(){
     auto self = shared_from_this();
     ClearStreambuf();  // 清空缓冲区
@@ -140,6 +159,7 @@ void ChatSession::ListeningFromCli(){
                 self->ListeningFromCli();
             } else {
                 // 错误处理
+                self->CloseMyself();
             }
         }
     );

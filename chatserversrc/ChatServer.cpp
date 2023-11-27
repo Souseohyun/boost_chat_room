@@ -10,6 +10,10 @@ ChatServer::ChatServer():TcpServer(){
     
 }
 
+//chatserver本身并不async_accept，而是Init了TcpServer
+//接受链接请求交给了底层TcpServer
+//TcpServer建立socket连接后，会新建一个ChatSession
+//文字通信的步骤，在ChatSession中
 void ChatServer::InitChatServer(std::string& ip,std::uint16_t port){
     if(!TcpServer::Init(ip,port)){
         std::cerr<<"TcpServer Init Error"<<std::endl;

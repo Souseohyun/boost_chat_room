@@ -17,6 +17,11 @@ private:
     ChatServer& serv_;
     boost::asio::streambuf  buff_;
 
+    bool                    bLive_;
+    std::chrono::steady_clock::time_point lastActiveTime_;
+    // 心跳超时时间，单位：秒
+    const int heartbeatTimeout_ = 10; 
+
 public:
     ChatSession();
     ~ChatSession() = default;
@@ -25,7 +30,9 @@ public:
 
     ChatSession(tcp::socket& ,ChatServer& );
     void InitializeSession();
-    
+    void CloseMyself();
+    //心跳检测
+    bool isAlive() const;
     //登录身份验证逻辑
     void SendAuthentication();
     void ReadAuthentication();
