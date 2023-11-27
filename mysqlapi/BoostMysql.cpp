@@ -69,6 +69,9 @@ bool BoostMysql::CheckUserInfo(std::string &usr, std::string &pass)
     return false; 
 }
 
+
+
+
 void BoostMysql::disconnect(){
     conn_.close();
     bInit_ = false;
