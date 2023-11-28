@@ -48,15 +48,16 @@ void TcpServer::StartAccept(){
                 if(!ec){
                     //this指针与shared_ptr相悖，不能使用
                     //尽可能传server的引用形
-                    auto pSess = std::make_shared<ChatSession>(socket,GetChatServRef());
+                    auto pTcpSess = std::make_shared<TcpSession>(socket,GetChatServRef());
                     {
                         this->tcpMutex_.lock();
-                        this->sessionList_.push_back(pSess);
+                        this->sessionList_.push_back(pTcpSess);
                         this->tcpMutex_.unlock();
                     }
                     
                     //初始化（实际目的是验证身份）
-                    pSess->InitializeSession();
+                    std::cout<<"to be init TcpSession。"<<std::endl;
+                    pTcpSess->IintTcpSession();
                 }else{
                     std::cout<<"accept fail"<<std::endl;
                 }
@@ -69,7 +70,7 @@ void TcpServer::StartAccept(){
     GetIOC().run();
 }
 
-void TcpServer::removeSession(const std::shared_ptr<ChatSession> &session){
+void TcpServer::removeSession(const std::shared_ptr<TcpSession> &session){
     std::lock_guard<std::mutex> lock(tcpMutex_);
     sessionList_.remove(session);
 }
@@ -91,8 +92,9 @@ void TcpServer::StartHeartbeat(){
 }
 
 void TcpServer::CheckHeartbeat(){
-    // 遍历所有活跃的会话并进行心跳检查
-    for (auto it = sessionList_.begin(); it != sessionList_.end(); /* no increment */) {
+    
+    /*// 遍历所有活跃的会话并进行心跳检查
+    for (auto it = sessionList_.begin(); it != sessionList_.end(); ) {
             auto session = *it;
             if (!session->isAlive()) {
                 tcpMutex_.lock();
@@ -102,5 +104,5 @@ void TcpServer::CheckHeartbeat(){
                 ++it;
                 //std::cout<<"living"<<std::endl;
             }
-    }
+    }*/
 }

@@ -3,7 +3,8 @@
 #include <string>
 #include <list>
 
-#include"./ChatSession.hpp"
+//#include"./ChatSession.hpp"
+#include"./TcpSession.hpp"
 
 class TcpServer : std::enable_shared_from_this<TcpServer>{
 public:
@@ -17,7 +18,7 @@ protected:
     //运行状态
     static bool                    serverRunning_;
     //session list
-    std::list<std::shared_ptr<ChatSession>> sessionList_;
+    std::list<std::shared_ptr<TcpSession>> sessionList_;
 
 private:
     //单独开辟一个线程用于接客，不妨碍其他逻辑
@@ -47,7 +48,7 @@ public:
     void StartAccept();
     void DoAsyncAccept();
     //用于配合session类中closemyself
-    void removeSession(const std::shared_ptr<ChatSession>& session);
+    void removeSession(const std::shared_ptr<TcpSession>& session);
 
 private:
     void StartHeartbeat();

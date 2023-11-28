@@ -1273,5 +1273,5 @@ CMakeFiles/MychatServer.dir/chatserversrc/TcpServer.cpp.o: \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/list \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/stl_list.h \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/bits/list.tcc \
-  /home/seohyun/mychat/MychatServer/chatserversrc/./ChatSession.hpp \
+  /home/seohyun/mychat/MychatServer/chatserversrc/./TcpSession.hpp \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/11/../../../../include/c++/11/iostream

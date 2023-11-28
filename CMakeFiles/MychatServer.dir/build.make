@@ -125,10 +125,24 @@ CMakeFiles/MychatServer.dir/chatserversrc/TcpServer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/MychatServer.dir/chatserversrc/TcpServer.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/seohyun/mychat/MychatServer/chatserversrc/TcpServer.cpp -o CMakeFiles/MychatServer.dir/chatserversrc/TcpServer.cpp.s
 
+CMakeFiles/MychatServer.dir/chatserversrc/TcpSession.cpp.o: CMakeFiles/MychatServer.dir/flags.make
+CMakeFiles/MychatServer.dir/chatserversrc/TcpSession.cpp.o: chatserversrc/TcpSession.cpp
+CMakeFiles/MychatServer.dir/chatserversrc/TcpSession.cpp.o: CMakeFiles/MychatServer.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/seohyun/mychat/MychatServer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/MychatServer.dir/chatserversrc/TcpSession.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MychatServer.dir/chatserversrc/TcpSession.cpp.o -MF CMakeFiles/MychatServer.dir/chatserversrc/TcpSession.cpp.o.d -o CMakeFiles/MychatServer.dir/chatserversrc/TcpSession.cpp.o -c /home/seohyun/mychat/MychatServer/chatserversrc/TcpSession.cpp
+
+CMakeFiles/MychatServer.dir/chatserversrc/TcpSession.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/MychatServer.dir/chatserversrc/TcpSession.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/seohyun/mychat/MychatServer/chatserversrc/TcpSession.cpp > CMakeFiles/MychatServer.dir/chatserversrc/TcpSession.cpp.i
+
+CMakeFiles/MychatServer.dir/chatserversrc/TcpSession.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/MychatServer.dir/chatserversrc/TcpSession.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/seohyun/mychat/MychatServer/chatserversrc/TcpSession.cpp -o CMakeFiles/MychatServer.dir/chatserversrc/TcpSession.cpp.s
+
 CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.o: CMakeFiles/MychatServer.dir/flags.make
 CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.o: chatserversrc/main.cpp
 CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.o: CMakeFiles/MychatServer.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/seohyun/mychat/MychatServer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/seohyun/mychat/MychatServer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.o -MF CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.o.d -o CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.o -c /home/seohyun/mychat/MychatServer/chatserversrc/main.cpp
 
 CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.i: cmake_force
@@ -142,7 +156,7 @@ CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.s: cmake_force
 CMakeFiles/MychatServer.dir/mysqlapi/BoostMysql.cpp.o: CMakeFiles/MychatServer.dir/flags.make
 CMakeFiles/MychatServer.dir/mysqlapi/BoostMysql.cpp.o: mysqlapi/BoostMysql.cpp
 CMakeFiles/MychatServer.dir/mysqlapi/BoostMysql.cpp.o: CMakeFiles/MychatServer.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/seohyun/mychat/MychatServer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/MychatServer.dir/mysqlapi/BoostMysql.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/seohyun/mychat/MychatServer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/MychatServer.dir/mysqlapi/BoostMysql.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MychatServer.dir/mysqlapi/BoostMysql.cpp.o -MF CMakeFiles/MychatServer.dir/mysqlapi/BoostMysql.cpp.o.d -o CMakeFiles/MychatServer.dir/mysqlapi/BoostMysql.cpp.o -c /home/seohyun/mychat/MychatServer/mysqlapi/BoostMysql.cpp
 
 CMakeFiles/MychatServer.dir/mysqlapi/BoostMysql.cpp.i: cmake_force
@@ -156,7 +170,7 @@ CMakeFiles/MychatServer.dir/mysqlapi/BoostMysql.cpp.s: cmake_force
 CMakeFiles/MychatServer.dir/mysqlapi/DatabaseMysql.cpp.o: CMakeFiles/MychatServer.dir/flags.make
 CMakeFiles/MychatServer.dir/mysqlapi/DatabaseMysql.cpp.o: mysqlapi/DatabaseMysql.cpp
 CMakeFiles/MychatServer.dir/mysqlapi/DatabaseMysql.cpp.o: CMakeFiles/MychatServer.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/seohyun/mychat/MychatServer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/MychatServer.dir/mysqlapi/DatabaseMysql.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/seohyun/mychat/MychatServer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/MychatServer.dir/mysqlapi/DatabaseMysql.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MychatServer.dir/mysqlapi/DatabaseMysql.cpp.o -MF CMakeFiles/MychatServer.dir/mysqlapi/DatabaseMysql.cpp.o.d -o CMakeFiles/MychatServer.dir/mysqlapi/DatabaseMysql.cpp.o -c /home/seohyun/mychat/MychatServer/mysqlapi/DatabaseMysql.cpp
 
 CMakeFiles/MychatServer.dir/mysqlapi/DatabaseMysql.cpp.i: cmake_force
@@ -170,7 +184,7 @@ CMakeFiles/MychatServer.dir/mysqlapi/DatabaseMysql.cpp.s: cmake_force
 CMakeFiles/MychatServer.dir/utils/Daemon.cpp.o: CMakeFiles/MychatServer.dir/flags.make
 CMakeFiles/MychatServer.dir/utils/Daemon.cpp.o: utils/Daemon.cpp
 CMakeFiles/MychatServer.dir/utils/Daemon.cpp.o: CMakeFiles/MychatServer.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/seohyun/mychat/MychatServer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/MychatServer.dir/utils/Daemon.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/seohyun/mychat/MychatServer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/MychatServer.dir/utils/Daemon.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MychatServer.dir/utils/Daemon.cpp.o -MF CMakeFiles/MychatServer.dir/utils/Daemon.cpp.o.d -o CMakeFiles/MychatServer.dir/utils/Daemon.cpp.o -c /home/seohyun/mychat/MychatServer/utils/Daemon.cpp
 
 CMakeFiles/MychatServer.dir/utils/Daemon.cpp.i: cmake_force
@@ -187,6 +201,7 @@ MychatServer_OBJECTS = \
 "CMakeFiles/MychatServer.dir/chatserversrc/ChatServer.cpp.o" \
 "CMakeFiles/MychatServer.dir/chatserversrc/ChatSession.cpp.o" \
 "CMakeFiles/MychatServer.dir/chatserversrc/TcpServer.cpp.o" \
+"CMakeFiles/MychatServer.dir/chatserversrc/TcpSession.cpp.o" \
 "CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.o" \
 "CMakeFiles/MychatServer.dir/mysqlapi/BoostMysql.cpp.o" \
 "CMakeFiles/MychatServer.dir/mysqlapi/DatabaseMysql.cpp.o" \
@@ -199,6 +214,7 @@ MychatServer: CMakeFiles/MychatServer.dir/base/ConfigFileReader.cpp.o
 MychatServer: CMakeFiles/MychatServer.dir/chatserversrc/ChatServer.cpp.o
 MychatServer: CMakeFiles/MychatServer.dir/chatserversrc/ChatSession.cpp.o
 MychatServer: CMakeFiles/MychatServer.dir/chatserversrc/TcpServer.cpp.o
+MychatServer: CMakeFiles/MychatServer.dir/chatserversrc/TcpSession.cpp.o
 MychatServer: CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.o
 MychatServer: CMakeFiles/MychatServer.dir/mysqlapi/BoostMysql.cpp.o
 MychatServer: CMakeFiles/MychatServer.dir/mysqlapi/DatabaseMysql.cpp.o
@@ -211,7 +227,7 @@ MychatServer: /usr/lib/x86_64-linux-gnu/libcrypto.so
 MychatServer: /usr/lib/x86_64-linux-gnu/libmysqlclient.so
 MychatServer: /usr/lib/x86_64-linux-gnu/libmysqlcppconn.so
 MychatServer: CMakeFiles/MychatServer.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/seohyun/mychat/MychatServer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable MychatServer"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/seohyun/mychat/MychatServer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable MychatServer"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/MychatServer.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
