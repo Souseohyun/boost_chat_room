@@ -45,13 +45,7 @@ public:
     }
 
 private:
-#ifdef _TCP_SERVER_TEST
-    tcp::acceptor                           acceptor_;
-    std::list<std::shared_ptr<ChatSession>> sessionList_;
-    static bool                             serverRunning_;  
-    
 
-#endif   
     //server独立线程，不妨碍其他逻辑
     std::thread                             servThread_;
     //服务器serverMutex_，条件变量
@@ -67,14 +61,7 @@ private:
 public:
     ChatServer();
     void InitChatServer(std::string&,std::uint16_t);
-#ifdef _TCP_SERVER_TEST    
-    ~ChatServer(){
-        if(servThread_.joinable()){
-            servThread_.join();
-            std::cout<<"join end"<<std::endl;
-        }
-    }
-#endif
+
     ChatServer(const ChatServer& rhs) = delete;
     ChatServer& operator =(const ChatServer& rhs) = delete;
 
@@ -83,26 +70,6 @@ public:
     //静态成员函数，用于main中等待Server结束，直接通过类名唤起
     static void WaitForServerToStop();
     void   Stop();  //Stop中手动cond.notify_one()
-#ifdef _TCP_SERVER_TEST  
-    ChatServer(boost::asio::io_context& ioc,std::uint16_t port);
-    ChatServer(/*boost::asio::io_context& ioc,*/std::uint16_t port);
-    bool   Init(const std::string& ,std::uint16_t );
-    void   Start();
-    void   Stop();  //Stop中手动cond.notify_one()
-
-    
-
-    static boost::asio::io_context& GetIOC();
-    void Run();
-    void DoAsyncAccept();
-
-
-#endif
-
-
-    
-    
-    
 
     void MakeMysql();
     BoostMysql& GetMysql();

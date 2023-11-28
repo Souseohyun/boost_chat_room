@@ -93,7 +93,8 @@ void TcpServer::StartHeartbeat(){
 
 void TcpServer::CheckHeartbeat(){
     
-    /*// 遍历所有活跃的会话并进行心跳检查
+    /*暂时废弃
+    // 遍历所有活跃的会话并进行心跳检查
     for (auto it = sessionList_.begin(); it != sessionList_.end(); ) {
             auto session = *it;
             if (!session->isAlive()) {

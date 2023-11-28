@@ -50,12 +50,8 @@ bool ChatSession::isAlive() const {
 
 void ChatSession::ClearStreambuf(){
 
-    
+    //移动内部指针达到忽略该部分数据的含义
     buff_.consume(buff_.size());
     
-    /*
-    强制将buff_缓冲区缩小而不是内部管理
-    boost::asio::streambuf::mutable_buffers_type bufs = streambuf.prepare(0);
-    streambuf.commit(0);
-    */
+    
 }

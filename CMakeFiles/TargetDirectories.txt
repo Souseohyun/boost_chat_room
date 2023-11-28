@@ -1,3 +1,0 @@
-/home/seohyun/mychat/MychatServer/CMakeFiles/MychatServer.dir
-/home/seohyun/mychat/MychatServer/CMakeFiles/edit_cache.dir
-/home/seohyun/mychat/MychatServer/CMakeFiles/rebuild_cache.dir
