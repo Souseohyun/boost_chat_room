@@ -27,7 +27,12 @@ public:
 
     //站在服务器的角度，对于此会话
     void ListeningFromCli();
+    void BrocastMessage(const std::string&);
 
+    //单次收发数据包
+    void SendDataPacket(const std::string&);
+    void ReadDataPacket();
+    
     //数据缓冲区相关
     void ClearStreambuf();
 

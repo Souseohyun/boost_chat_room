@@ -49,7 +49,7 @@ public:
     void DoAsyncAccept();
     //用于配合session类中closemyself
     void removeSession(const std::shared_ptr<TcpSession>& session);
-
+    void DoBrocastMessage(const std::string&,const TcpSession*);
 private:
     void StartHeartbeat();
     void CheckHeartbeat();

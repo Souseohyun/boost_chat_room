@@ -54,9 +54,12 @@ void TcpServer::StartAccept(){
                         this->sessionList_.push_back(pTcpSess);
                         this->tcpMutex_.unlock();
                     }
-                    
+                    int i = 1;
+                    for(auto session:sessionList_){
+                        std::cout<<i++<<std::endl;
+                    }
                     //初始化（实际目的是验证身份）
-                    std::cout<<"to be init TcpSession。"<<std::endl;
+                    //std::cout<<"to be init TcpSession。"<<std::endl;
                     pTcpSess->IintTcpSession();
                 }else{
                     std::cout<<"accept fail"<<std::endl;
@@ -73,6 +76,17 @@ void TcpServer::StartAccept(){
 void TcpServer::removeSession(const std::shared_ptr<TcpSession> &session){
     std::lock_guard<std::mutex> lock(tcpMutex_);
     sessionList_.remove(session);
+}
+
+void TcpServer::DoBrocastMessage(const std::string &msg,const TcpSession* sender)
+{
+    std::lock_guard<std::mutex> lock(tcpMutex_);
+    for (const auto& session : sessionList_) {
+        if (session == sender->shared_from_this()) {
+            continue;
+        }
+        session->SendDataPacket(msg);
+    }
 }
 
 void TcpServer::StartHeartbeat(){

@@ -8,6 +8,7 @@ TcpSession::TcpSession(tcp::socket& socket, ChatServer &serv)
 
 void TcpSession::IintTcpSession(){
     //初始化后开始身份验证逻辑
+    std::cout<<"initing"<<std::endl;
     Authentication();
 }
 /*
@@ -30,6 +31,7 @@ void TcpSession::Authentication()
 void TcpSession::SendAuthentication()
 {
     auto self = shared_from_this();
+    
     socket_.async_write_some(
         boost::asio::buffer("请输入账号@密码：\n"),
         [this,self](const boost::system::error_code& ec,std::size_t bytes){
@@ -111,11 +113,37 @@ void TcpSession::ListeningFromCli()
                 //使用 std::getline 它会读取并丢弃 \n
                 std::getline(ist,line);
                 std::cout<<line<<std::endl;
+                BrocastMessage(line);//仅供测试，转发给其他所有客户端
+
                 // 继续监听
                 self->ListeningFromCli();
             } else {
                 // 错误处理
                 //self->CloseMyself();
+            }
+        }
+    );
+}
+
+
+//调取服务器协助完成广播信息
+void TcpSession::BrocastMessage(const std::string& msg){
+    this->chatServer_.DoBrocastMessage(msg,this);
+
+}
+
+void TcpSession::SendDataPacket(const std::string &data)
+{
+    std::cout<<"into SendDataPacket func()"<<std::endl;
+    boost::asio::async_write(socket_, boost::asio::buffer(data+"\n"),
+        [this,data](const boost::system::error_code& ec, std::size_t /*bytes_transferred*/) {
+            if (!ec) {
+                // 数据发送成功
+                // 可以在这里进行一些处理
+                std::cout<<"send success: "<<data<<std::endl;
+            } else {
+                // 错误处理
+                std::cerr<<"SendDataPacket Error: "<<ec.what()<<std::endl;
             }
         }
     );
