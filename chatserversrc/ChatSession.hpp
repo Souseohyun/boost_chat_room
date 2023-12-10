@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <boost/asio.hpp> // Include the necessary header for boost::asio
-
+#include <nlohmann/json.hpp>
 
 class TcpSession;
 /*
@@ -17,10 +17,7 @@ private:
     TcpSession&             tcpSession_;
     boost::asio::streambuf  buff_;
 
-    bool                    bLive_;
-    std::chrono::steady_clock::time_point lastActiveTime_;
-    // 心跳超时时间，单位：秒
-    const int heartbeatTimeout_ = 10; 
+
 
 public:
     ChatSession();
@@ -29,18 +26,10 @@ public:
     ChatSession& operator =(const ChatSession& ) = delete;
 
     ChatSession(TcpSession& );
-    void InitializeSession();
-    void CloseMyself();
-    //心跳检测
-    bool isAlive() const;
-    //登录身份验证逻辑
-    void SendAuthentication();
-    void ReadAuthentication();
-    void ParseAuthentication(std::string&);
 
-    //站在服务器的角度，对于此会话
-    void ListeningFromCli();
-    void PushMessege(const std::string&);//加上const能直接匹配"hello"
+    //核心业务逻辑，与TcpSession交互
+    void ChatSessionStart(const nlohmann::json& json);
 
     void ClearStreambuf();
+
 };

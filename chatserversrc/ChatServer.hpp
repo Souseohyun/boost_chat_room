@@ -26,7 +26,7 @@ enum CLIENT_TYPE
 
 //#define _TCP_SERVER_TEST
 
-
+class ImageServer;
 //已存储用户信息
 struct StoredUserInfo{
     std::int32_t    userid;
@@ -40,8 +40,14 @@ using tcp = boost::asio::ip::tcp;
 
 public:
     //重写虚函数，使基类获取派生类指针
+    std::string GetType() const override { return "ChatServer";}
+    
     ChatServer& GetChatServRef() override {
         return *this;
+    }
+    ImageServer& GetImageServRef() override {
+        std::cerr<<"ChatServer return ImageServer Error"<<std::endl;
+        throw std::logic_error("GetImageServRef called on an inappropriate object");
     }
 
 private:

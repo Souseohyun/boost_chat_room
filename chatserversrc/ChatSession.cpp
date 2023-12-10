@@ -16,42 +16,31 @@
 
 ChatSession::ChatSession(TcpSession& tcpSession)
 :tcpSession_(tcpSession){
-    //std::cout<<"it's test----ChatSession Success"<<std::endl;
-    //socket建立成功后开始验证身份逻辑
-    //SendAuthentication();切勿在构造函数中shared_from_this
-    //很容易在构造函数中加载某函数，某函数不自觉使用以上
-    bLive_ = true;
-   
+    
     
 }
-//绕开构造函数中weak error，初始化后发送身份验证请求
-void ChatSession::InitializeSession() {
-    //SendAuthentication();
+
+//TcpSession启用，传入json，
+//Chat json格式见json文件夹
+void ChatSession::ChatSessionStart(const nlohmann::json &json){
+//type == "message_text"
+    std::string text = json.value("text","");
+    //待办：区分群聊私聊
+
+    //打包信息，并调用广播(仅测试用例)
+    nlohmann::json broadcastJson;
+    broadcastJson["type"] = "re_message_text";
+    broadcastJson["data"] = text;
+
+    std::string reString = broadcastJson.dump();
+
+    tcpSession_.BrocastMessage(reString);
+
 }
 
-void ChatSession::CloseMyself(){
-    /*serv_.removeSession(shared_from_this());
-    std::lock_guard<std::mutex> lock(sessionMutex_);
-    bLive_ = false;
-    */
-}
-
-bool ChatSession::isAlive() const {
-    return bLive_;
-
-/*
-    return std::chrono::duration_cast<std::chrono::seconds>(
-        std::chrono::steady_clock::now() - lastActiveTime_)
-        .count() < heartbeatTimeout_;
-        */
-}
-
-
-
-void ChatSession::ClearStreambuf(){
+void ChatSession::ClearStreambuf()
+{
 
     //移动内部指针达到忽略该部分数据的含义
     buff_.consume(buff_.size());
-    
-    
 }

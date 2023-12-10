@@ -1,0 +1,10 @@
+{
+    "type": "login",
+    "username": "user123",
+    "password": "encrypted_password",
+    "metadata": {
+      "clientVersion": "1.0",
+      "device": "Windows 10 PC"
+    }
+  }
+  

@@ -75,7 +75,9 @@
         "strstream": "cpp",
         "cfenv": "cpp",
         "charconv": "cpp",
-        "shared_mutex": "cpp"
+        "shared_mutex": "cpp",
+        "forward_list": "cpp",
+        "valarray": "cpp"
     },
     "cmake.configureOnOpen": true
 }

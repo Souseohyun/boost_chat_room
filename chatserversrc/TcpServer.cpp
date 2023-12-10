@@ -26,7 +26,7 @@ bool TcpServer::Init(const std::string &ip, std::uint16_t port){
 void TcpServer::Start(){
     serverRunning_ = true;
     this->tcpServThread_ = std::thread(&TcpServer::StartAccept,this);
-    //此处结束后，将会逐步递归回ChatServer中，单独一个线程异步接客
+    //此处结束后，将会逐步递归回，单独一个线程异步接客
 
 }
 
@@ -47,8 +47,19 @@ void TcpServer::StartAccept(){
                 //将Socket交给Session创建出会话
                 if(!ec){
                     //this指针与shared_ptr相悖，不能使用
-                    //尽可能传server的引用形
-                    auto pTcpSess = std::make_shared<TcpSession>(socket,GetChatServRef());
+                    //虚函数覆写导致传入本体指针
+                    std::shared_ptr<TcpSession> pTcpSess;
+                    if(this->GetType() == "ChatServer"){
+                        std::cout<<"Chat"<<std::endl;
+                        pTcpSess = std::make_shared<TcpSession>(socket,GetChatServRef());
+                        //初始化（实际目的是验证身份）
+                        pTcpSess->IintChatTcpSession();
+                    }else if(this->GetType() == "ImageServer"){
+                        std::cout<<"Image"<<std::endl;
+                        pTcpSess = std::make_shared<TcpSession>(socket,GetImageServRef());
+
+                    }
+                    
                     {
                         this->tcpMutex_.lock();
                         this->sessionList_.push_back(pTcpSess);
@@ -58,9 +69,7 @@ void TcpServer::StartAccept(){
                     for(auto session:sessionList_){
                         std::cout<<i++<<std::endl;
                     }
-                    //初始化（实际目的是验证身份）
-                    //std::cout<<"to be init TcpSession。"<<std::endl;
-                    pTcpSess->IintTcpSession();
+                    
                 }else{
                     std::cout<<"accept fail"<<std::endl;
                 }
@@ -73,9 +82,13 @@ void TcpServer::StartAccept(){
     GetIOC().run();
 }
 
-void TcpServer::removeSession(const std::shared_ptr<TcpSession> &session){
+
+
+void TcpServer::RemoveSession(const std::shared_ptr<TcpSession> &session){
     std::lock_guard<std::mutex> lock(tcpMutex_);
     sessionList_.remove(session);
+    // 不需要显式删除 session，智能指针会自动处理
+    std::cout<<"session delete"<<std::endl;
 }
 
 void TcpServer::DoBrocastMessage(const std::string &msg,const TcpSession* sender)

@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 3.12)
 # 设置项目名称
 project(MychatServer)
 
+# 查找 nlohmann_json 库
+find_package(nlohmann_json 3.2.0 REQUIRED)
+
 # 查找boost库   CMake提供了boost库的“包配置文件”
 find_package(Boost REQUIRED COMPONENTS system thread headers)
 find_package(Threads REQUIRED)
@@ -71,7 +74,36 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
   Threads::Threads 
   OpenSSL::SSL 
   OpenSSL::Crypto
+  nlohmann_json::nlohmann_json
   ${MYSQL_LIB}
   ${MYSQLCPPCONN_LIB}
 )
 
+####################################################################
+# Image Server CMake
+
+file(GLOB SRC_IMAGE_FILES
+    "${PROJECT_SOURCE_DIR}/chatserversrc/ChatServer.cpp"
+    "${PROJECT_SOURCE_DIR}/chatserversrc/TcpServer.cpp"
+    "${PROJECT_SOURCE_DIR}/chatserversrc/ChatSession.cpp"
+    "${PROJECT_SOURCE_DIR}/chatserversrc/TcpSession.cpp"
+    "${PROJECT_SOURCE_DIR}/base/*.cpp"
+    "${PROJECT_SOURCE_DIR}/utils/*.cpp"
+    "${PROJECT_SOURCE_DIR}/mysqlapi/*.cpp"
+    "${PROJECT_SOURCE_DIR}/imageserversrc/*.cpp"
+    )
+
+add_executable(ImageServer  ${SRC_IMAGE_FILES})
+
+
+target_link_libraries(ImageServer
+  PRIVATE 
+  Boost::system 
+  Boost::thread 
+  Threads::Threads 
+  OpenSSL::SSL 
+  OpenSSL::Crypto
+  nlohmann_json::nlohmann_json
+  ${MYSQL_LIB}
+  ${MYSQLCPPCONN_LIB}
+)

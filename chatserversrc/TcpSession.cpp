@@ -2,99 +2,135 @@
 #include"ChatServer.hpp"
 
 TcpSession::TcpSession(tcp::socket& socket, ChatServer &serv)
-:socket_(std::move(socket)),chatServer_(serv){
+:socket_(std::move(socket)),
+chatServer_(serv),
+imageServer_((ImageServer&)serv){//只要不用imageServer_，一切都会好起来的，汗颜
     pChatSess_ = std::make_shared<ChatSession>(*this);
+    //开启tcp keepalive机制
+    socket_.set_option(boost::asio::socket_base::keep_alive(true));
 }
 
-void TcpSession::IintTcpSession(){
+TcpSession::TcpSession(tcp::socket &socket, ImageServer &serv)
+:socket_(std::move(socket)),
+imageServer_(serv),
+chatServer_((ChatServer&)serv){
+    //修改该句构造函数不匹配 pImageSess_ = std::make_shared<ImageSession>(*this);
+    //逻辑中断在此，23.12.11 1：07
+
+
+
+    //开启tcp keepalive机制
+    socket_.set_option(boost::asio::socket_base::keep_alive(true));
+}
+
+void TcpSession::IintChatTcpSession(){
     //初始化后开始身份验证逻辑
     std::cout<<"initing"<<std::endl;
-    Authentication();
+    //Authentication();
+    LoginAuthen();
 }
+
+void TcpSession::InitImageTcpSession(){
+    //log by 12/11 1:04 
+    std::cout<<"InitImageTcpSession success."<<std::endl;
+
+}
+
 /*
-    身份验证逻辑：
-    1-建立好socket链接后，服务端异步读入数据
-    2-客户机点击登录则主动将框内验证信息发送（账号密码）
-    3-调取数据库查询，验证成功进入会话逻辑，失败中断socket链接
-    (base版本：
-        由于没有写客户端代码，客户机用nc命令代替
-        1-服务器向客户端发送（账号/密码）请求，客户端输入。
-        2-根据账号，服务端查询数据库，没有则提示错误，断开连接。
-        3-有账号，服务端验证密码，正确则进入会话逻辑
-        )
-    */
-void TcpSession::Authentication()
-{
-    SendAuthentication();
-}
-
-void TcpSession::SendAuthentication()
-{
-    auto self = shared_from_this();
-    
-    socket_.async_write_some(
-        boost::asio::buffer("请输入账号@密码：\n"),
-        [this,self](const boost::system::error_code& ec,std::size_t bytes){
-            if(!ec && bytes!=0){
-                self->ReadAuthentication();
-            }else{
-                self->SendAuthentication();
-            }
-        });
-
-}
-
-void TcpSession::ReadAuthentication()
-{
+    待完成工作：客户端发来密码应hash加密，服务器解密后验证
+*/
+void TcpSession::LoginAuthen(){
     ClearStreambuf();
     auto self = shared_from_this();
-    boost::asio::async_read_until(socket_, streamBuff_, '\n',
-        [this, self](const boost::system::error_code& ec, std::size_t /*bytes_transferred*/) {
-            if (!ec) {
-                // 数据读取成功，处理数据
-                std::istream ist(&self->streamBuff_);
-                std::string line;
-                //使用 std::getline 它会读取并丢弃 \n
-                std::getline(ist,line);
-                ParseAuthentication(line);
-            } else {
-                // 错误处理
+    boost::asio::async_read_until(socket_, streamBuff_, "\r\n",
+            [this, self](const boost::system::error_code& ec, std::size_t /*bytes_transferred*/) {
+                if (!ec) {
+                    // 从streamBuff_中提取字符串
+                    std::istream stream(&streamBuff_);
+                    std::string str((std::istreambuf_iterator<char>(stream)), std::istreambuf_iterator<char>());
+
+                    // 解析 JSON 数据
+                    try {
+                        auto json = nlohmann::json::parse(str);
+                        if(json["type"] == "login"){
+                        // 处理登录逻辑
+                        std::string username = json["username"];
+                        std::string password = json["password"];
+                        // 对 username 和 password 进行验证
+
+                        std::cout<<"user:"<<username<<"  password:"<<password<<std::endl;
+                        self->ParseAuthentication(username,password);
+                        }else{
+                            std::cerr<<"Read json type is not Login"<<std::endl;
+                            self->ClearMyself();
+                        }
+                        
+                    } catch (const std::exception& e) {
+                        // JSON 解析错误
+                        std::cerr << "LoginAuthen JSON parsing error: " << e.what() << std::endl;
+                    }
+                } else {
+                    // 错误处理
+                    if (ec == boost::asio::error::eof || ec == boost::asio::error::connection_reset || ec == boost::system::errc::connection_reset) {
+                        std::cout << "LoginAuthen KeepAlive Over: " << ec.what() << std::endl;
+                        self->ClearMyself();
+                    } else {
+                        // 其他错误处理
+                        std::cerr << "LoginAuthen Another Error: " << ec.what() << std::endl;
+                    }
+                }
             }
-        }
-    );
+        );
 }
 
-void TcpSession::ParseAuthentication(std::string &line)
+void TcpSession::ParseAuthentication(std::string &usrname,std::string& pasword)
 {
-    //Windows发来的数据换行符是\r\n，getline处理了\n，也许会\r也要处理
-    if(!line.empty() && line.back() == '\r')
-        line.pop_back();
-    //@分割账号密码
-    std::size_t delimiterPos = line.find('@');
-    if(delimiterPos != std::string::npos){
-        std::string usrname = line.substr(0,delimiterPos);
-        std::string pasword = line.substr(delimiterPos+1);
-
-        std::cout<<"usr: "<<usrname<<"  password: "<<pasword<<std::endl;
-
-        //在此处调用server，使用其mysql()进行核验
+    //在此处调用server，使用其mysql()进行核验
         if(chatServer_.GetMysql().CheckUserInfo(usrname,pasword)){
             //往回发送成功登陆，否则反之
             //this->pChatSess_->PushMessege("验证通过，登陆成功\n");
             std::cout<<"Autn Success"<<std::endl;
-            ListeningFromCli();
+            SendLoginResponse(true);
+            //ListeningFromCli();
         }else{
             //this->pChatSess_->PushMessege("验证失败，断开连接\n");
             std::cout<<"Autn Error"<<std::endl;
             socket_.close();
 
         }
-
-    }
+    
 }
 
-//现在是demo，发来的总是文字，之后写好客户端后，
-//将会打包信息，该函数将改写为根据标志位处理信息包
+void TcpSession::SendLoginResponse(bool bLogin){
+    nlohmann::json response;
+        response["login_success"] = bLogin;
+        if (bLogin) {
+            response["message"] = "Authentication successful.";
+            // 可以添加更多的响应数据，如用户信息、令牌等
+
+        } else {
+            response["message"] = "Authentication failed. Check username or password.";
+        }
+
+        // 将 JSON 对象转换为字符串
+        std::string responseStr = response.dump();
+
+        
+
+        // 发送响应
+        SendDataPacket(responseStr);
+
+        //启动监听
+        ListeningFromCli();
+}
+
+//将最后活动时间改为now就可以
+void TcpSession::UpdateLastActivity(){
+    lastActivityTime_ = std::chrono::steady_clock::now();
+}
+
+
+
 void TcpSession::ListeningFromCli()
 {
     auto self = shared_from_this();
@@ -104,27 +140,42 @@ void TcpSession::ListeningFromCli()
     std::size_t buffer_size = 1024;
 
     // 异步读取数据到streambuf
-    boost::asio::async_read_until(socket_, streamBuff_, '\n',
-        [this, self](const boost::system::error_code& ec, std::size_t /*bytes_transferred*/) {
-            if (!ec) {
-                // 数据读取成功，处理数据
-                std::istream ist(&self->streamBuff_);
-                std::string line;
-                //使用 std::getline 它会读取并丢弃 \n
-                std::getline(ist,line);
-                std::cout<<line<<std::endl;
-                BrocastMessage(line);//仅供测试，转发给其他所有客户端
-
-                // 继续监听
-                self->ListeningFromCli();
-            } else {
-                // 错误处理
-                //self->CloseMyself();
-            }
-        }
+    boost::asio::async_read_until(socket_, streamBuff_, "\r\n",
+        std::bind(&TcpSession::ListenHandle, shared_from_this(), std::placeholders::_1, std::placeholders::_2)
     );
+
 }
 
+void TcpSession::ListenHandle(const boost::system::error_code& ec,std::size_t bytes){
+    auto self = shared_from_this();
+    if(!ec){
+        std::istream ist(&streamBuff_);
+        std::string line;
+        std::getline(ist, line);//从streamBuff_拿到数据存到line里
+        try {
+            // 解析JSON数据
+            nlohmann::json data = nlohmann::json::parse(line);
+
+            // 根据键type拿到对应值
+            std::string type = data.value("type", "");
+            
+            if (type == "message_text") {
+                //如果是文字信息，交付给chatSession处理
+                std::cout<<data<<std::endl;
+                pChatSess_->ChatSessionStart(data);
+
+            } else if (type == "message_image") {
+                
+            }
+            // ...更多类型的处理...
+
+            self->ListeningFromCli();
+        } catch (const nlohmann::json::parse_error& e) {
+            // JSON解析错误处理
+            std::cerr << "JSON parsing error: " << e.what() << std::endl;
+        }
+    }
+}
 
 //调取服务器协助完成广播信息
 void TcpSession::BrocastMessage(const std::string& msg){
@@ -132,18 +183,28 @@ void TcpSession::BrocastMessage(const std::string& msg){
 
 }
 
+//只发送string，不负责string打包成json
+//若要调用该函数，需在不同业务逻辑里将json转成string再调
 void TcpSession::SendDataPacket(const std::string &data)
 {
     std::cout<<"into SendDataPacket func()"<<std::endl;
-    boost::asio::async_write(socket_, boost::asio::buffer(data+"\n"),
-        [this,data](const boost::system::error_code& ec, std::size_t /*bytes_transferred*/) {
+    std::string package = data + "\r\n";
+    boost::asio::async_write(socket_, boost::asio::buffer(package),
+        [this,package](const boost::system::error_code& ec, std::size_t /*bytes_transferred*/) {
             if (!ec) {
                 // 数据发送成功
                 // 可以在这里进行一些处理
-                std::cout<<"send success: "<<data<<std::endl;
+                std::cout<<"send success: "<<package<<std::endl;
             } else {
                 // 错误处理
-                std::cerr<<"SendDataPacket Error: "<<ec.what()<<std::endl;
+                //如果因为keepalive机制检测eof断连
+                if (ec == boost::asio::error::eof || ec == boost::asio::error::connection_reset || ec == boost::system::errc::connection_reset) {
+                    std::cout<<"SendDataPacket KeepAlive Over"<<ec.what()<<std::endl;
+                    this->ClearMyself();
+                }else{
+                    // 其他错误处理
+                    std::cerr<<"SendDataPacket Another Error"<<std::endl;
+                }
             }
         }
     );
@@ -152,4 +213,20 @@ void TcpSession::SendDataPacket(const std::string &data)
 void TcpSession::ClearStreambuf()
 {
     streamBuff_.consume(streamBuff_.size());
+}
+
+void TcpSession::ClearMyself(){
+    // 如果 socket 仍然开放，再关闭它（基本不可能）
+    if (socket_.is_open()) {
+        boost::system::error_code ec;
+        socket_.close(ec);
+        if (ec) {
+            std::cerr << "Error closing socket: " << ec.message() << std::endl;
+        }
+    }
+
+    // 清理其他资源...
+
+    // 通知 TcpServer 移除此 session
+    chatServer_.RemoveSession(shared_from_this());
 }

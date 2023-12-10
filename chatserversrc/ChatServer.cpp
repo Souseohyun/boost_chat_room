@@ -16,7 +16,7 @@ ChatServer::ChatServer():TcpServer(){
 //文字通信的步骤，在ChatSession中
 void ChatServer::InitChatServer(std::string& ip,std::uint16_t port){
     if(!TcpServer::Init(ip,port)){
-        std::cerr<<"TcpServer Init Error"<<std::endl;
+        std::cerr<<"ChatServerIniting...TcpServer Init Error"<<std::endl;
     }
     this->MakeMysql();
     

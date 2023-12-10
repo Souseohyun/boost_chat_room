@@ -129,12 +129,26 @@ MychatServer/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/build
 .PHONY : MychatServer/fast
 
+#=============================================================================
+# Target rules for targets named ImageServer
+
+# Build rule for target.
+ImageServer: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ImageServer
+.PHONY : ImageServer
+
+# fast build rule for target.
+ImageServer/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/build
+.PHONY : ImageServer/fast
+
 base/ConfigFileReader.o: base/ConfigFileReader.cpp.o
 .PHONY : base/ConfigFileReader.o
 
 # target to build an object file
 base/ConfigFileReader.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/base/ConfigFileReader.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/base/ConfigFileReader.cpp.o
 .PHONY : base/ConfigFileReader.cpp.o
 
 base/ConfigFileReader.i: base/ConfigFileReader.cpp.i
@@ -143,6 +157,7 @@ base/ConfigFileReader.i: base/ConfigFileReader.cpp.i
 # target to preprocess a source file
 base/ConfigFileReader.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/base/ConfigFileReader.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/base/ConfigFileReader.cpp.i
 .PHONY : base/ConfigFileReader.cpp.i
 
 base/ConfigFileReader.s: base/ConfigFileReader.cpp.s
@@ -151,6 +166,7 @@ base/ConfigFileReader.s: base/ConfigFileReader.cpp.s
 # target to generate assembly for a file
 base/ConfigFileReader.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/base/ConfigFileReader.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/base/ConfigFileReader.cpp.s
 .PHONY : base/ConfigFileReader.cpp.s
 
 chatserversrc/ChatServer.o: chatserversrc/ChatServer.cpp.o
@@ -159,6 +175,7 @@ chatserversrc/ChatServer.o: chatserversrc/ChatServer.cpp.o
 # target to build an object file
 chatserversrc/ChatServer.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/ChatServer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/chatserversrc/ChatServer.cpp.o
 .PHONY : chatserversrc/ChatServer.cpp.o
 
 chatserversrc/ChatServer.i: chatserversrc/ChatServer.cpp.i
@@ -167,6 +184,7 @@ chatserversrc/ChatServer.i: chatserversrc/ChatServer.cpp.i
 # target to preprocess a source file
 chatserversrc/ChatServer.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/ChatServer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/chatserversrc/ChatServer.cpp.i
 .PHONY : chatserversrc/ChatServer.cpp.i
 
 chatserversrc/ChatServer.s: chatserversrc/ChatServer.cpp.s
@@ -175,6 +193,7 @@ chatserversrc/ChatServer.s: chatserversrc/ChatServer.cpp.s
 # target to generate assembly for a file
 chatserversrc/ChatServer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/ChatServer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/chatserversrc/ChatServer.cpp.s
 .PHONY : chatserversrc/ChatServer.cpp.s
 
 chatserversrc/ChatSession.o: chatserversrc/ChatSession.cpp.o
@@ -183,6 +202,7 @@ chatserversrc/ChatSession.o: chatserversrc/ChatSession.cpp.o
 # target to build an object file
 chatserversrc/ChatSession.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/ChatSession.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/chatserversrc/ChatSession.cpp.o
 .PHONY : chatserversrc/ChatSession.cpp.o
 
 chatserversrc/ChatSession.i: chatserversrc/ChatSession.cpp.i
@@ -191,6 +211,7 @@ chatserversrc/ChatSession.i: chatserversrc/ChatSession.cpp.i
 # target to preprocess a source file
 chatserversrc/ChatSession.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/ChatSession.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/chatserversrc/ChatSession.cpp.i
 .PHONY : chatserversrc/ChatSession.cpp.i
 
 chatserversrc/ChatSession.s: chatserversrc/ChatSession.cpp.s
@@ -199,6 +220,7 @@ chatserversrc/ChatSession.s: chatserversrc/ChatSession.cpp.s
 # target to generate assembly for a file
 chatserversrc/ChatSession.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/ChatSession.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/chatserversrc/ChatSession.cpp.s
 .PHONY : chatserversrc/ChatSession.cpp.s
 
 chatserversrc/TcpServer.o: chatserversrc/TcpServer.cpp.o
@@ -207,6 +229,7 @@ chatserversrc/TcpServer.o: chatserversrc/TcpServer.cpp.o
 # target to build an object file
 chatserversrc/TcpServer.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/TcpServer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/chatserversrc/TcpServer.cpp.o
 .PHONY : chatserversrc/TcpServer.cpp.o
 
 chatserversrc/TcpServer.i: chatserversrc/TcpServer.cpp.i
@@ -215,6 +238,7 @@ chatserversrc/TcpServer.i: chatserversrc/TcpServer.cpp.i
 # target to preprocess a source file
 chatserversrc/TcpServer.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/TcpServer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/chatserversrc/TcpServer.cpp.i
 .PHONY : chatserversrc/TcpServer.cpp.i
 
 chatserversrc/TcpServer.s: chatserversrc/TcpServer.cpp.s
@@ -223,6 +247,7 @@ chatserversrc/TcpServer.s: chatserversrc/TcpServer.cpp.s
 # target to generate assembly for a file
 chatserversrc/TcpServer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/TcpServer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/chatserversrc/TcpServer.cpp.s
 .PHONY : chatserversrc/TcpServer.cpp.s
 
 chatserversrc/TcpSession.o: chatserversrc/TcpSession.cpp.o
@@ -231,6 +256,7 @@ chatserversrc/TcpSession.o: chatserversrc/TcpSession.cpp.o
 # target to build an object file
 chatserversrc/TcpSession.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/TcpSession.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/chatserversrc/TcpSession.cpp.o
 .PHONY : chatserversrc/TcpSession.cpp.o
 
 chatserversrc/TcpSession.i: chatserversrc/TcpSession.cpp.i
@@ -239,6 +265,7 @@ chatserversrc/TcpSession.i: chatserversrc/TcpSession.cpp.i
 # target to preprocess a source file
 chatserversrc/TcpSession.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/TcpSession.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/chatserversrc/TcpSession.cpp.i
 .PHONY : chatserversrc/TcpSession.cpp.i
 
 chatserversrc/TcpSession.s: chatserversrc/TcpSession.cpp.s
@@ -247,6 +274,7 @@ chatserversrc/TcpSession.s: chatserversrc/TcpSession.cpp.s
 # target to generate assembly for a file
 chatserversrc/TcpSession.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/TcpSession.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/chatserversrc/TcpSession.cpp.s
 .PHONY : chatserversrc/TcpSession.cpp.s
 
 chatserversrc/main.o: chatserversrc/main.cpp.o
@@ -273,12 +301,85 @@ chatserversrc/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/chatserversrc/main.cpp.s
 .PHONY : chatserversrc/main.cpp.s
 
+imageserversrc/ImageServer.o: imageserversrc/ImageServer.cpp.o
+.PHONY : imageserversrc/ImageServer.o
+
+# target to build an object file
+imageserversrc/ImageServer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/imageserversrc/ImageServer.cpp.o
+.PHONY : imageserversrc/ImageServer.cpp.o
+
+imageserversrc/ImageServer.i: imageserversrc/ImageServer.cpp.i
+.PHONY : imageserversrc/ImageServer.i
+
+# target to preprocess a source file
+imageserversrc/ImageServer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/imageserversrc/ImageServer.cpp.i
+.PHONY : imageserversrc/ImageServer.cpp.i
+
+imageserversrc/ImageServer.s: imageserversrc/ImageServer.cpp.s
+.PHONY : imageserversrc/ImageServer.s
+
+# target to generate assembly for a file
+imageserversrc/ImageServer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/imageserversrc/ImageServer.cpp.s
+.PHONY : imageserversrc/ImageServer.cpp.s
+
+imageserversrc/ImageSession.o: imageserversrc/ImageSession.cpp.o
+.PHONY : imageserversrc/ImageSession.o
+
+# target to build an object file
+imageserversrc/ImageSession.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/imageserversrc/ImageSession.cpp.o
+.PHONY : imageserversrc/ImageSession.cpp.o
+
+imageserversrc/ImageSession.i: imageserversrc/ImageSession.cpp.i
+.PHONY : imageserversrc/ImageSession.i
+
+# target to preprocess a source file
+imageserversrc/ImageSession.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/imageserversrc/ImageSession.cpp.i
+.PHONY : imageserversrc/ImageSession.cpp.i
+
+imageserversrc/ImageSession.s: imageserversrc/ImageSession.cpp.s
+.PHONY : imageserversrc/ImageSession.s
+
+# target to generate assembly for a file
+imageserversrc/ImageSession.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/imageserversrc/ImageSession.cpp.s
+.PHONY : imageserversrc/ImageSession.cpp.s
+
+imageserversrc/main.o: imageserversrc/main.cpp.o
+.PHONY : imageserversrc/main.o
+
+# target to build an object file
+imageserversrc/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/imageserversrc/main.cpp.o
+.PHONY : imageserversrc/main.cpp.o
+
+imageserversrc/main.i: imageserversrc/main.cpp.i
+.PHONY : imageserversrc/main.i
+
+# target to preprocess a source file
+imageserversrc/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/imageserversrc/main.cpp.i
+.PHONY : imageserversrc/main.cpp.i
+
+imageserversrc/main.s: imageserversrc/main.cpp.s
+.PHONY : imageserversrc/main.s
+
+# target to generate assembly for a file
+imageserversrc/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/imageserversrc/main.cpp.s
+.PHONY : imageserversrc/main.cpp.s
+
 mysqlapi/BoostMysql.o: mysqlapi/BoostMysql.cpp.o
 .PHONY : mysqlapi/BoostMysql.o
 
 # target to build an object file
 mysqlapi/BoostMysql.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/mysqlapi/BoostMysql.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/mysqlapi/BoostMysql.cpp.o
 .PHONY : mysqlapi/BoostMysql.cpp.o
 
 mysqlapi/BoostMysql.i: mysqlapi/BoostMysql.cpp.i
@@ -287,6 +388,7 @@ mysqlapi/BoostMysql.i: mysqlapi/BoostMysql.cpp.i
 # target to preprocess a source file
 mysqlapi/BoostMysql.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/mysqlapi/BoostMysql.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/mysqlapi/BoostMysql.cpp.i
 .PHONY : mysqlapi/BoostMysql.cpp.i
 
 mysqlapi/BoostMysql.s: mysqlapi/BoostMysql.cpp.s
@@ -295,6 +397,7 @@ mysqlapi/BoostMysql.s: mysqlapi/BoostMysql.cpp.s
 # target to generate assembly for a file
 mysqlapi/BoostMysql.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/mysqlapi/BoostMysql.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/mysqlapi/BoostMysql.cpp.s
 .PHONY : mysqlapi/BoostMysql.cpp.s
 
 mysqlapi/DatabaseMysql.o: mysqlapi/DatabaseMysql.cpp.o
@@ -303,6 +406,7 @@ mysqlapi/DatabaseMysql.o: mysqlapi/DatabaseMysql.cpp.o
 # target to build an object file
 mysqlapi/DatabaseMysql.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/mysqlapi/DatabaseMysql.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/mysqlapi/DatabaseMysql.cpp.o
 .PHONY : mysqlapi/DatabaseMysql.cpp.o
 
 mysqlapi/DatabaseMysql.i: mysqlapi/DatabaseMysql.cpp.i
@@ -311,6 +415,7 @@ mysqlapi/DatabaseMysql.i: mysqlapi/DatabaseMysql.cpp.i
 # target to preprocess a source file
 mysqlapi/DatabaseMysql.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/mysqlapi/DatabaseMysql.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/mysqlapi/DatabaseMysql.cpp.i
 .PHONY : mysqlapi/DatabaseMysql.cpp.i
 
 mysqlapi/DatabaseMysql.s: mysqlapi/DatabaseMysql.cpp.s
@@ -319,6 +424,7 @@ mysqlapi/DatabaseMysql.s: mysqlapi/DatabaseMysql.cpp.s
 # target to generate assembly for a file
 mysqlapi/DatabaseMysql.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/mysqlapi/DatabaseMysql.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/mysqlapi/DatabaseMysql.cpp.s
 .PHONY : mysqlapi/DatabaseMysql.cpp.s
 
 utils/Daemon.o: utils/Daemon.cpp.o
@@ -327,6 +433,7 @@ utils/Daemon.o: utils/Daemon.cpp.o
 # target to build an object file
 utils/Daemon.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/utils/Daemon.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/utils/Daemon.cpp.o
 .PHONY : utils/Daemon.cpp.o
 
 utils/Daemon.i: utils/Daemon.cpp.i
@@ -335,6 +442,7 @@ utils/Daemon.i: utils/Daemon.cpp.i
 # target to preprocess a source file
 utils/Daemon.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/utils/Daemon.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/utils/Daemon.cpp.i
 .PHONY : utils/Daemon.cpp.i
 
 utils/Daemon.s: utils/Daemon.cpp.s
@@ -343,6 +451,7 @@ utils/Daemon.s: utils/Daemon.cpp.s
 # target to generate assembly for a file
 utils/Daemon.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/utils/Daemon.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/utils/Daemon.cpp.s
 .PHONY : utils/Daemon.cpp.s
 
 # Help Target
@@ -353,6 +462,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... ImageServer"
 	@echo "... MychatServer"
 	@echo "... base/ConfigFileReader.o"
 	@echo "... base/ConfigFileReader.i"
@@ -372,6 +482,15 @@ help:
 	@echo "... chatserversrc/main.o"
 	@echo "... chatserversrc/main.i"
 	@echo "... chatserversrc/main.s"
+	@echo "... imageserversrc/ImageServer.o"
+	@echo "... imageserversrc/ImageServer.i"
+	@echo "... imageserversrc/ImageServer.s"
+	@echo "... imageserversrc/ImageSession.o"
+	@echo "... imageserversrc/ImageSession.i"
+	@echo "... imageserversrc/ImageSession.s"
+	@echo "... imageserversrc/main.o"
+	@echo "... imageserversrc/main.i"
+	@echo "... imageserversrc/main.s"
 	@echo "... mysqlapi/BoostMysql.o"
 	@echo "... mysqlapi/BoostMysql.i"
 	@echo "... mysqlapi/BoostMysql.s"
