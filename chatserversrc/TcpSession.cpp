@@ -1,5 +1,7 @@
-#include"TcpSession.hpp"
 #include"ChatServer.hpp"
+#include"TcpSession.hpp"
+#include"../imageserversrc/ImageSession.hpp"
+#include"../imageserversrc/ImageServer.hpp"
 
 TcpSession::TcpSession(tcp::socket& socket, ChatServer &serv)
 :socket_(std::move(socket)),
@@ -14,25 +16,26 @@ TcpSession::TcpSession(tcp::socket &socket, ImageServer &serv)
 :socket_(std::move(socket)),
 imageServer_(serv),
 chatServer_((ChatServer&)serv){
-    //修改该句构造函数不匹配 pImageSess_ = std::make_shared<ImageSession>(*this);
-    //逻辑中断在此，23.12.11 1：07
-
-
-
+    pImageSess_ = std::make_shared<ImageSession>(*this);
+    
     //开启tcp keepalive机制
     socket_.set_option(boost::asio::socket_base::keep_alive(true));
 }
 
 void TcpSession::IintChatTcpSession(){
     //初始化后开始身份验证逻辑
-    std::cout<<"initing"<<std::endl;
+    std::cout<<"class TcpSession for ChatTcpSession init"<<std::endl;
     //Authentication();
     LoginAuthen();
 }
 
 void TcpSession::InitImageTcpSession(){
     //log by 12/11 1:04 
-    std::cout<<"InitImageTcpSession success."<<std::endl;
+    std::cout<<"class TcpSession for ImageTcpSession init"<<std::endl;
+    //在客户端中，只有完成ChatTcpSession的LoginAuthen()验证才能初始化图像Session
+    //故不再验证身份，直接开始监听并完善http逻辑
+    //此处shi山代码，逻辑层次不分明，将图像监听放在了ImageSession中，有缘再来改正
+    ImageListeningFromCli();
 
 }
 
@@ -90,7 +93,15 @@ void TcpSession::ParseAuthentication(std::string &usrname,std::string& pasword)
             //往回发送成功登陆，否则反之
             //this->pChatSess_->PushMessege("验证通过，登陆成功\n");
             std::cout<<"Autn Success"<<std::endl;
-            SendLoginResponse(true);
+
+            //查询用户在数据库中其他标志信息，准备发挥客户端加以利用
+
+            //select f_user_id from t_user where f_username = 'happycat';
+            std::string user_id = chatServer_.GetMysql().ExecSql(
+                "select f_user_id from t_user where f_username = '"+usrname+"';"
+            );
+
+            SendLoginResponse(true,user_id);
             //ListeningFromCli();
         }else{
             //this->pChatSess_->PushMessege("验证失败，断开连接\n");
@@ -101,13 +112,15 @@ void TcpSession::ParseAuthentication(std::string &usrname,std::string& pasword)
     
 }
 
-void TcpSession::SendLoginResponse(bool bLogin){
+void TcpSession::SendLoginResponse(bool bLogin,std::string& user_id){
     nlohmann::json response;
         response["login_success"] = bLogin;
         if (bLogin) {
             response["message"] = "Authentication successful.";
             // 可以添加更多的响应数据，如用户信息、令牌等
-
+            //发回供客户端使用的该账户标识信息
+            response["user_id"] = user_id;
+            //chatServer_.GetMysql().ExecSql()
         } else {
             response["message"] = "Authentication failed. Check username or password.";
         }
@@ -124,7 +137,13 @@ void TcpSession::SendLoginResponse(bool bLogin){
         ListeningFromCli();
 }
 
-//将最后活动时间改为now就可以
+//方便imagesession使用mysql
+std::string TcpSession::UseImageMysql(const std::string& sql)
+{
+    return imageServer_.GetMysql().ExecSql(sql);
+}
+
+// 将最后活动时间改为now就可以
 void TcpSession::UpdateLastActivity(){
     lastActivityTime_ = std::chrono::steady_clock::now();
 }
@@ -208,6 +227,37 @@ void TcpSession::SendDataPacket(const std::string &data)
             }
         }
     );
+}
+
+
+
+//Image服务器通过收发http报文完成图像的传输
+void TcpSession::ImageListeningFromCli(){
+    
+    auto self = shared_from_this();
+    ClearStreambuf();  // 清空缓冲区
+    boost::asio::async_read_until(socket_, streamBuff_, "\r\n\r\n",
+        std::bind(&TcpSession::ImageListenHandle, shared_from_this(), std::placeholders::_1, std::placeholders::_2)
+    );
+
+}
+
+void TcpSession::ImageListenHandle(const boost::system::error_code &ec, std::size_t bytes)
+{
+    auto self = shared_from_this();
+    if(!ec){
+        std::istream stream(&streamBuff_);
+        std::string request((std::istreambuf_iterator<char>(stream)), std::istreambuf_iterator<char>());
+        // 请求处理逻辑
+        //若客户端发来的是HTTP GET命令，路径为/download请求
+        if (request.find("GET /download") != std::string::npos) {
+            self->pImageSess_->ImageSessionDownload(request);
+
+            //继续监听图片请求
+            ImageListeningFromCli();
+        }
+    }
+
 }
 
 void TcpSession::ClearStreambuf()

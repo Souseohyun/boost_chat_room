@@ -1,32 +1,38 @@
+#pragma once
+
 #include<iostream>
 #include<boost/asio.hpp>
+#include <nlohmann/json.hpp>
+
+class TcpSession;
 
 class ImageSession : public std::enable_shared_from_this<ImageSession> {
     using tcp = boost::asio::ip::tcp;
 private:
-    tcp::socket socket_;
-    enum { max_length = 1024 };     //约等于范围内#define
-    char data_[max_length];
+    std::mutex  sessionMutex_;
+    //tcp::socket socket_;
+    TcpSession&             tcpSession_;
+    boost::asio::streambuf  buff_;
+
+
 
 public:
-    ImageSession(tcp::socket socket) : socket_(std::move(socket)) {}
+    
+    ImageSession() = delete;
+    ImageSession(TcpSession&);
 
-    void Start() {
-        DoRead();
-    }
+
+    
+    void ImageSessionDownload(const std::string& request);
 
 private:
-    void DoRead() {
-        auto self(shared_from_this());
-        socket_.async_read_some(boost::asio::buffer(data_, max_length),
-            [this, self](boost::system::error_code ec, std::size_t length) {
-                if (!ec) {
-                    ProcessRequest(data_, length);
-                    // You would need to implement process_request to handle the incoming data
-                    // and respond appropriately
-                }
-            });
-    }
+     
 
+    
+    void PostHttpResult(const std::string&);
     void ProcessRequest(char*,std::size_t);
+
+
+    void ClearStreambuf();
+
 };

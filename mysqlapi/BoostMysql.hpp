@@ -39,6 +39,8 @@ public:
         std::string&,std::string&,
         std::string&,std::string&,std::string&);
     bool CheckUserInfo(std::string& usr,std::string& pass);
+
+    std::string ExecSql(const std::string& sql);
 private:
     
 

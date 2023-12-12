@@ -57,7 +57,8 @@ void TcpServer::StartAccept(){
                     }else if(this->GetType() == "ImageServer"){
                         std::cout<<"Image"<<std::endl;
                         pTcpSess = std::make_shared<TcpSession>(socket,GetImageServRef());
-
+                        //初始化（进入TcpSession中有关图像会话的逻辑
+                        pTcpSess->InitImageTcpSession();
                     }
                     
                     {

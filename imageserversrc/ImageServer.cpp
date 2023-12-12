@@ -7,9 +7,9 @@ std::condition_variable ImageServer::serverCond_;
 void ImageServer::InitImageServer(std::string &ip, std::uint16_t port){
     if(!TcpServer::Init(ip,port)){
         std::cerr<<"ImageServerIniting...TcpServer Init Error"<<std::endl;
-    }else{
-        std::cout<<"it's test. ImageServer Success"<<std::endl;
     }
+    //ImageServer有自己的服务器数据库
+    this->MakeMysql();
     
 }
 

@@ -306,6 +306,7 @@ imageserversrc/ImageServer.o: imageserversrc/ImageServer.cpp.o
 
 # target to build an object file
 imageserversrc/ImageServer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/imageserversrc/ImageServer.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/imageserversrc/ImageServer.cpp.o
 .PHONY : imageserversrc/ImageServer.cpp.o
 
@@ -314,6 +315,7 @@ imageserversrc/ImageServer.i: imageserversrc/ImageServer.cpp.i
 
 # target to preprocess a source file
 imageserversrc/ImageServer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/imageserversrc/ImageServer.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/imageserversrc/ImageServer.cpp.i
 .PHONY : imageserversrc/ImageServer.cpp.i
 
@@ -322,6 +324,7 @@ imageserversrc/ImageServer.s: imageserversrc/ImageServer.cpp.s
 
 # target to generate assembly for a file
 imageserversrc/ImageServer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/imageserversrc/ImageServer.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/imageserversrc/ImageServer.cpp.s
 .PHONY : imageserversrc/ImageServer.cpp.s
 
@@ -330,6 +333,7 @@ imageserversrc/ImageSession.o: imageserversrc/ImageSession.cpp.o
 
 # target to build an object file
 imageserversrc/ImageSession.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/imageserversrc/ImageSession.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/imageserversrc/ImageSession.cpp.o
 .PHONY : imageserversrc/ImageSession.cpp.o
 
@@ -338,6 +342,7 @@ imageserversrc/ImageSession.i: imageserversrc/ImageSession.cpp.i
 
 # target to preprocess a source file
 imageserversrc/ImageSession.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/imageserversrc/ImageSession.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/imageserversrc/ImageSession.cpp.i
 .PHONY : imageserversrc/ImageSession.cpp.i
 
@@ -346,6 +351,7 @@ imageserversrc/ImageSession.s: imageserversrc/ImageSession.cpp.s
 
 # target to generate assembly for a file
 imageserversrc/ImageSession.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MychatServer.dir/build.make CMakeFiles/MychatServer.dir/imageserversrc/ImageSession.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageServer.dir/build.make CMakeFiles/ImageServer.dir/imageserversrc/ImageSession.cpp.s
 .PHONY : imageserversrc/ImageSession.cpp.s
 

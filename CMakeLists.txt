@@ -48,6 +48,8 @@ file(GLOB SRC_FILES
     "${PROJECT_SOURCE_DIR}/base/*.cpp"
     "${PROJECT_SOURCE_DIR}/utils/*.cpp"
     "${PROJECT_SOURCE_DIR}/mysqlapi/*.cpp"
+    "${PROJECT_SOURCE_DIR}/imageserversrc/ImageServer.cpp"
+    "${PROJECT_SOURCE_DIR}/imageserversrc/ImageSession.cpp"
     )
 
 set(CMAKE_BUILD_TYPE Debug)
@@ -83,6 +85,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
 # Image Server CMake
 
 file(GLOB SRC_IMAGE_FILES
+    "${PROJECT_SOURCE_DIR}/imageserversrc/*.cpp"
     "${PROJECT_SOURCE_DIR}/chatserversrc/ChatServer.cpp"
     "${PROJECT_SOURCE_DIR}/chatserversrc/TcpServer.cpp"
     "${PROJECT_SOURCE_DIR}/chatserversrc/ChatSession.cpp"
@@ -90,7 +93,7 @@ file(GLOB SRC_IMAGE_FILES
     "${PROJECT_SOURCE_DIR}/base/*.cpp"
     "${PROJECT_SOURCE_DIR}/utils/*.cpp"
     "${PROJECT_SOURCE_DIR}/mysqlapi/*.cpp"
-    "${PROJECT_SOURCE_DIR}/imageserversrc/*.cpp"
+    
     )
 
 add_executable(ImageServer  ${SRC_IMAGE_FILES})

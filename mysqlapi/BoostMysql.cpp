@@ -5,6 +5,8 @@ BoostMysql::~BoostMysql()
     disconnect();
 }
 
+#define _BOOSTMYSQL
+
 BoostMysql::BoostMysql(boost::asio::io_context &ioc)
     : sslIoc_(boost::asio::ssl::context::tls_client),
       conn_(ioc, sslIoc_)
@@ -13,6 +15,7 @@ BoostMysql::BoostMysql(boost::asio::io_context &ioc)
 
 bool BoostMysql::Initialize(std::string &host, std::string &port, std::string &usr, std::string &pass,std::string& dbname){
 
+    std::cout<<"init mysql"<<std::endl;
     if(bInit_)
         return false;
     //端点参数填入,port只接受数字
@@ -52,6 +55,8 @@ bool BoostMysql::CheckUserInfo(std::string &usr, std::string &pass)
 {
     
     try {
+        // 清空之前的结果集
+        result_ = boost::mysql::results();
         //带参的预处理语句
         stmt_ = conn_.prepare_statement(
             "select count(*) from t_user where f_username = ? and f_password = ?"
@@ -69,8 +74,30 @@ bool BoostMysql::CheckUserInfo(std::string &usr, std::string &pass)
     return false; 
 }
 
+//example: select f_avatar_url from t_user where f_user_id = 1003; 
+std::string BoostMysql::ExecSql(const std::string &sql)
+{
+    
+    try {
+        // 准备并执行 SQL 语句
+        std::cout<<sql<<std::endl;
 
+        conn_.execute(sql, result_);
 
+        
+        
+        // 判断结果
+            
+            std::string data = result_.rows().at(0).at(0).get_string();
+            return data;
+        //}
+    } catch (const boost::system::system_error& e) {
+        std::cerr << "Error executing SQL: " << e.what() << std::endl;
+    }
+
+    return std::string(); // 如果没有结果或发生错误，返回空字符串
+    
+}
 
 void BoostMysql::disconnect(){
     conn_.close();

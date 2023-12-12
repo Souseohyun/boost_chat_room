@@ -3,6 +3,8 @@
 #include<boost/asio.hpp>
 #include <nlohmann/json.hpp>
 
+
+
 class ChatServer;
 class ChatSession;
 class ImageServer;
@@ -39,9 +41,11 @@ public:
     //身份验证逻辑（New）
     void LoginAuthen();
     void ParseAuthentication(std::string &usrname,std::string& pasword);
-    void SendLoginResponse(bool bLogin);
+    void SendLoginResponse(bool bLogin,std::string&);
 
 
+    //关于在TcpSession中调用Server的数据库进行操作
+    std::string UseImageMysql(const std::string& sql);
     
     //关于会话存活性检测（心跳）
     void UpdateLastActivity();
@@ -55,10 +59,14 @@ public:
     void SendDataPacket(const std::string&);
     void ReadDataPacket();
     
+
+
+    //ImageSession相关，站在图像服务器角度对于该会话的功能
+    void ImageListeningFromCli();
+    void ImageListenHandle(const boost::system::error_code& ec,std::size_t bytes);
+
     //数据缓冲区相关
     void ClearStreambuf();
-
-
     //必要的清理资源，如socket已断开，该Session已无存在意义
     void ClearMyself();
 };

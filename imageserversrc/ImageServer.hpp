@@ -1,5 +1,8 @@
+#pragma once
+
 #include "../chatserversrc/TcpServer.hpp"
 #include"../mysqlapi/BoostMysql.hpp"
+
 
 
 
