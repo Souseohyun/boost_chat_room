@@ -4,6 +4,10 @@ cmake_minimum_required(VERSION 3.12)
 # 设置项目名称
 project(MychatServer)
 
+# 设置 C++17 标准
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # 查找 nlohmann_json 库
 find_package(nlohmann_json 3.2.0 REQUIRED)
 

@@ -2,7 +2,7 @@
 
 #include "../chatserversrc/TcpSession.hpp"
 #include "ImageSession.hpp"
-
+#include "../mysqlapi/BoostMysql.hpp"
 
 
 ImageSession::ImageSession(TcpSession & tcpSession)
@@ -12,7 +12,7 @@ ImageSession::ImageSession(TcpSession & tcpSession)
 
 
 //被调用处理HTTP GET /download命令
-/*  request格式
+/*  request格式     根据id请求头像
 GET /download?id=123 HTTP/1.1
 Host: 172.30.229.221:8000
 Connection: Keep-Alive
@@ -31,11 +31,23 @@ void ImageSession::ImageSessionDownload(const std::string &request)
         //测试用例，通过pic_id == f_user_id，拿到头像图片
         std::cout<<pic_id<<std::endl;
 
-        std::string filePath = tcpSession_.UseImageMysql(baseSql);
+        SqlResult result = tcpSession_.UseImageMysql().ExecSql(baseSql);
 
+        
+        std::visit([this](auto&& value) {
+            using T = std::decay_t<decltype(value)>;
+            if constexpr (std::is_same_v<T, int>) {
+            // 处理 int 类型的结果
+            
+            } else if constexpr (std::is_same_v<T, std::string>) {
+            // 处理 string 类型的结果
+            PostHttpResult(value);
+            }
+            // 处理其他类型
+        }, result);
         //std::cout<<result<<std::endl;
         //将result回送给客户端
-        PostHttpResult(filePath);
+        //PostHttpResult(filePath);
         
     }
 

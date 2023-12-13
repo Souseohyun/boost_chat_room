@@ -1,8 +1,10 @@
 #pragma once
 
-#include<iostream>
-#include<boost/asio.hpp>
+#include <iostream>
+#include <boost/asio.hpp>
 #include <nlohmann/json.hpp>
+#include <variant>
+
 
 class TcpSession;
 

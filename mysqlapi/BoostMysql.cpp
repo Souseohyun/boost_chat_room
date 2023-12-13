@@ -74,30 +74,46 @@ bool BoostMysql::CheckUserInfo(std::string &usr, std::string &pass)
     return false; 
 }
 
-//example: select f_avatar_url from t_user where f_user_id = 1003; 
-std::string BoostMysql::ExecSql(const std::string &sql)
+
+SqlResult BoostMysql::ExecSql(const std::string &sql)
 {
+    //example: select f_avatar_url from t_user where f_user_id = 1003; 
+    std::cout<<sql<<std::endl;
+    // 查找 "select " 和 " from" 之间的字符串，并因此进入不同逻辑
+    size_t startPos = sql.find("select ") + 7; // 加 7 是为了跳过 "select " 这个子串
+    size_t endPos = sql.find(" from");
+     // 提取字段名
+    std::string field = sql.substr(startPos, endPos - startPos);
+
     
     try {
-        // 准备并执行 SQL 语句
-        std::cout<<sql<<std::endl;
 
+        //release conn_.execute(sql, result_);
         conn_.execute(sql, result_);
-
         
-        
-        // 判断结果
-            
-            std::string data = result_.rows().at(0).at(0).get_string();
+        // 根据字段名决定执行哪个逻辑
+        if (field == "f_avatar_url") {
+            // f_avatar_url 返回的是varchar，需as_string()
+            std::string data = result_.rows().at(0).at(0).as_string();
             return data;
-        //}
+        } else if (field == "f_user_id") {
+        // f_user_id 返回的是int
+            int data = result_.rows().at(0).at(0).as_int64();
+            return data;
+        } else {
+        // 妹有相关处理逻辑
+            std::cout << "Field not recognized" << std::endl;
+        }
+        
+
     } catch (const boost::system::system_error& e) {
         std::cerr << "Error executing SQL: " << e.what() << std::endl;
     }
 
-    return std::string(); // 如果没有结果或发生错误，返回空字符串
+    return 0xFF;
     
 }
+
 
 void BoostMysql::disconnect(){
     conn_.close();

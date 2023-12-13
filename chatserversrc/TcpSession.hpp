@@ -9,6 +9,7 @@ class ChatServer;
 class ChatSession;
 class ImageServer;
 class ImageSession;
+class BoostMysql;
 
 class TcpSession :public std::enable_shared_from_this<TcpSession>{
     using tcp = boost::asio::ip::tcp;
@@ -41,11 +42,11 @@ public:
     //身份验证逻辑（New）
     void LoginAuthen();
     void ParseAuthentication(std::string &usrname,std::string& pasword);
-    void SendLoginResponse(bool bLogin,std::string&);
+    void SendLoginResponse(bool bLogin,int&);
 
 
     //关于在TcpSession中调用Server的数据库进行操作
-    std::string UseImageMysql(const std::string& sql);
+    BoostMysql& UseImageMysql();
     
     //关于会话存活性检测（心跳）
     void UpdateLastActivity();

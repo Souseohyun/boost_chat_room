@@ -9,9 +9,13 @@
 #include <boost/system/system_error.hpp>
 #include <iostream>
 #include <string>
+#include <typeinfo>
+#include <variant>      //C++17
 
 //#define _BOOSTMYSQL
 
+// 定义一个 variant  包含所有ExecSql可能的返回类型
+using SqlResult = std::variant<int, std::string /* 将来的其他类型 */>;
 
 class BoostMysql{
     using tcp = boost::asio::ip::tcp;
@@ -40,9 +44,17 @@ public:
         std::string&,std::string&,std::string&);
     bool CheckUserInfo(std::string& usr,std::string& pass);
 
-    std::string ExecSql(const std::string& sql);
+    SqlResult ExecSql(const std::string& sql);
+    //其中processResult由外界lambda表达式定义
+    
 private:
     
 
     void disconnect();
 };
+
+
+
+
+
+

@@ -63,6 +63,7 @@ void TcpSession::LoginAuthen(){
 
                         std::cout<<"user:"<<username<<"  password:"<<password<<std::endl;
                         self->ParseAuthentication(username,password);
+
                         }else{
                             std::cerr<<"Read json type is not Login"<<std::endl;
                             self->ClearMyself();
@@ -96,12 +97,27 @@ void TcpSession::ParseAuthentication(std::string &usrname,std::string& pasword)
 
             //查询用户在数据库中其他标志信息，准备发挥客户端加以利用
 
+            //查询该username对应的user_id
             //select f_user_id from t_user where f_username = 'happycat';
-            std::string user_id = chatServer_.GetMysql().ExecSql(
+            
+            SqlResult result_id = chatServer_.GetMysql().ExecSql(
                 "select f_user_id from t_user where f_username = '"+usrname+"';"
             );
+            
+            std::visit([this](auto&& value) {
+                using T = std::decay_t<decltype(value)>;
+                if constexpr (std::is_same_v<T, int>) {
+                // 处理 int 类型的结果
+                SendLoginResponse(true,value);
+                } else if constexpr (std::is_same_v<T, std::string>) {
+                // 处理 string 类型的结果
+                std::cerr<<"variant visit error"<<std::endl;
+                }
+                // 处理其他类型
+            }, result_id);
+            
 
-            SendLoginResponse(true,user_id);
+            
             //ListeningFromCli();
         }else{
             //this->pChatSess_->PushMessege("验证失败，断开连接\n");
@@ -112,7 +128,7 @@ void TcpSession::ParseAuthentication(std::string &usrname,std::string& pasword)
     
 }
 
-void TcpSession::SendLoginResponse(bool bLogin,std::string& user_id){
+void TcpSession::SendLoginResponse(bool bLogin,int& user_id){
     nlohmann::json response;
         response["login_success"] = bLogin;
         if (bLogin) {
@@ -138,9 +154,11 @@ void TcpSession::SendLoginResponse(bool bLogin,std::string& user_id){
 }
 
 //方便imagesession使用mysql
-std::string TcpSession::UseImageMysql(const std::string& sql)
+BoostMysql& TcpSession::UseImageMysql()
 {
-    return imageServer_.GetMysql().ExecSql(sql);
+    //权宜之计，此处写死传入string，将来需要重构，与ImageSession逻辑接洽
+    //return imageServer_.GetMysql().ExecSql<std::string>(sql);
+    return imageServer_.GetMysql();
 }
 
 // 将最后活动时间改为now就可以
