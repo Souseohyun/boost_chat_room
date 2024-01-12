@@ -39,51 +39,87 @@ void TcpServer::Stop(){
 
 }
 
+// void TcpServer::StartAccept(){
+    
+
+//     this->acceptor_.async_accept(
+//             [this](const boost::system::error_code& ec,boost::asio::ip::tcp::socket socket){
+//                 //将Socket交给Session创建出会话
+//                 if(!ec){
+//                     //this指针与shared_ptr相悖，不能使用
+//                     //虚函数覆写导致传入本体指针
+//                     std::shared_ptr<TcpSession> pTcpSess;
+//                     if(this->GetType() == "ChatServer"){
+//                         std::cout<<"Chat"<<std::endl;
+//                         pTcpSess = std::make_shared<TcpSession>(socket,GetChatServRef());
+//                         //初始化（实际目的是验证身份）
+//                         pTcpSess->IintChatTcpSession();
+//                     }else if(this->GetType() == "ImageServer"){
+//                         std::cout<<"Image"<<std::endl;
+//                         pTcpSess = std::make_shared<TcpSession>(socket,GetImageServRef());
+//                         //初始化（进入TcpSession中有关图像会话的逻辑
+//                         pTcpSess->InitImageTcpSession();
+//                     }
+                    
+//                     {
+//                         this->tcpMutex_.lock();
+//                         this->sessionList_.push_back(pTcpSess);
+//                         this->tcpMutex_.unlock();
+//                     }
+//                     int i = 1;
+//                     for(auto session:sessionList_){
+//                         std::cout<<i++<<std::endl;
+//                     }
+                    
+//                 }else{
+//                     std::cout<<"accept fail"<<std::endl;
+//                 }
+//                 this->StartAccept();
+//             }
+//         );
+    
+
+
+//     GetIOC().run();
+// }
+
 void TcpServer::StartAccept(){
-    
-
+    std::cout<<"into StartAccept"<<std::endl;
     this->acceptor_.async_accept(
-            [this](const boost::system::error_code& ec,boost::asio::ip::tcp::socket socket){
-                //将Socket交给Session创建出会话
-                if(!ec){
-                    //this指针与shared_ptr相悖，不能使用
-                    //虚函数覆写导致传入本体指针
-                    std::shared_ptr<TcpSession> pTcpSess;
-                    if(this->GetType() == "ChatServer"){
-                        std::cout<<"Chat"<<std::endl;
-                        pTcpSess = std::make_shared<TcpSession>(socket,GetChatServRef());
-                        //初始化（实际目的是验证身份）
-                        pTcpSess->IintChatTcpSession();
-                    }else if(this->GetType() == "ImageServer"){
-                        std::cout<<"Image"<<std::endl;
-                        pTcpSess = std::make_shared<TcpSession>(socket,GetImageServRef());
-                        //初始化（进入TcpSession中有关图像会话的逻辑
-                        pTcpSess->InitImageTcpSession();
-                    }
-                    
-                    {
-                        this->tcpMutex_.lock();
-                        this->sessionList_.push_back(pTcpSess);
-                        this->tcpMutex_.unlock();
-                    }
-                    int i = 1;
-                    for(auto session:sessionList_){
-                        std::cout<<i++<<std::endl;
-                    }
-                    
-                }else{
-                    std::cout<<"accept fail"<<std::endl;
+        [this](const boost::system::error_code& ec, boost::asio::ip::tcp::socket socket){
+            if(!ec){
+                std::cout<<"into async_accept"<<std::endl;
+                std::shared_ptr<TcpSession> pTcpSess;
+                
+                
+                
+                if(this->GetType() == "ChatServer"){
+                    pTcpSess = std::make_shared<TcpSession>(socket, GetChatServRef());
+                    //回调函数为注册session到map中
+                    pTcpSess->SetOnAuthenticatedCallback([this,&pTcpSess](int userId) {
+                    RegisterSession(userId, pTcpSess);
+                    });
+std::cout<<"after RegisterSession"<<std::endl;
+                    pTcpSess->IintChatTcpSession(); 
+                } else if(this->GetType() == "ImageServer"){
+                    pTcpSess = std::make_shared<TcpSession>(socket, GetImageServRef());
+                    pTcpSess->InitImageTcpSession();
                 }
-                this->StartAccept();
+                
+                // 在用户身份验证后，注册该会话
+                
+
+                this->tcpMutex_.lock();
+                this->sessionList_.push_back(pTcpSess);
+                this->tcpMutex_.unlock();
+            } else {
+                std::cout << "accept fail" << std::endl;
             }
-        );
-    
-
-
+            this->StartAccept();
+        }
+    );
     GetIOC().run();
 }
-
-
 
 void TcpServer::RemoveSession(const std::shared_ptr<TcpSession> &session){
     std::lock_guard<std::mutex> lock(tcpMutex_);
@@ -101,6 +137,26 @@ void TcpServer::DoBrocastMessage(const std::string &msg,const TcpSession* sender
         }
         session->SendDataPacket(msg);
     }
+}
+
+//hash map 三函数
+void TcpServer::RegisterSession(int userId, std::shared_ptr<TcpSession> session) {
+    std::lock_guard<std::mutex> lock(tcpMutex_);
+    idToSessionMap_[userId] = session;
+}
+
+void TcpServer::UnregisterSession(int userId) {
+    std::lock_guard<std::mutex> lock(tcpMutex_);
+    idToSessionMap_.erase(userId);
+}
+
+std::shared_ptr<TcpSession> TcpServer::GetSessionById(int userId) {
+    std::lock_guard<std::mutex> lock(tcpMutex_);
+    auto it = idToSessionMap_.find(userId);
+    if (it != idToSessionMap_.end() && !it->second.expired()) {
+        return it->second.lock();
+    }
+    return nullptr;
 }
 
 void TcpServer::StartHeartbeat(){

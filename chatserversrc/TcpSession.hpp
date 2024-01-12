@@ -10,10 +10,14 @@ class ChatSession;
 class ImageServer;
 class ImageSession;
 class BoostMysql;
+struct FriendInfo;
 
 class TcpSession :public std::enable_shared_from_this<TcpSession>{
     using tcp = boost::asio::ip::tcp;
 private:
+    int         userId_{0};
+    std::function<void(int)> onAuthenticatedCallback_; // 身份验证回调
+
     tcp::socket socket_;
     
     std::shared_ptr<ChatSession> pChatSess_;
@@ -43,6 +47,13 @@ public:
     void LoginAuthen();
     void ParseAuthentication(std::string &usrname,std::string& pasword);
     void SendLoginResponse(bool bLogin,int&);
+    void SendLoginResponse(bool bLogin, int& user_id, const std::vector<FriendInfo>& friends);
+
+    
+    void SetOnAuthenticatedCallback(const std::function<void(int)>& callback);
+
+    void NotifyAuthenticationSuccess(int userId);
+    
 
 
     //关于在TcpSession中调用Server的数据库进行操作
@@ -66,6 +77,8 @@ public:
     void ImageListeningFromCli();
     void ImageListenHandle(const boost::system::error_code& ec,std::size_t bytes);
 
+    int GetUserId() const;
+    ChatServer& GetServer() const;
     //数据缓冲区相关
     void ClearStreambuf();
     //必要的清理资源，如socket已断开，该Session已无存在意义

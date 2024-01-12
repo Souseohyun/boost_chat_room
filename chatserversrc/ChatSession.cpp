@@ -11,9 +11,9 @@
     在后续使用中Session.cpp的编写中，由于引入了Server.hpp
     Server类得以完整的加载
 */
-#include"TcpSession.hpp"
+#include "TcpSession.hpp"
 #include "ChatSession.hpp"
-
+#include "ChatServer.hpp"
 ChatSession::ChatSession(TcpSession& tcpSession)
 :tcpSession_(tcpSession){
     
@@ -26,15 +26,26 @@ void ChatSession::ChatSessionStart(const nlohmann::json &json){
 //type == "message_text"
     std::string text = json.value("text","");
     //待办：区分群聊私聊
+    int         srcid = json.value("srcid",0);
+    int         destid= json.value("destid",0);
 
     //打包信息，并调用广播(仅测试用例)
     nlohmann::json broadcastJson;
-    broadcastJson["type"] = "re_message_text";
+    broadcastJson["type"] = "message_text";
+    broadcastJson["srcid"] = srcid;
+    broadcastJson["destid"] = destid;
     broadcastJson["data"] = text;
 
     std::string reString = broadcastJson.dump();
 
-    tcpSession_.BrocastMessage(reString);
+    //log-2024.1.5 此时消息到这顺利
+    //你需要应用srcid，destid发给对应的人，不要广播
+    destid = json.value("destid", 0);
+    auto destSession = tcpSession_.GetServer().GetSessionById(destid);
+    if (destSession) {
+        destSession->SendDataPacket(reString);
+    }
+    //tcpSession_.BrocastMessage(reString);
 
 }
 

@@ -1,0 +1,4 @@
+/home/seohyun/mychat/MychatServer/build/CMakeFiles/MychatServer.dir
+/home/seohyun/mychat/MychatServer/build/CMakeFiles/ImageServer.dir
+/home/seohyun/mychat/MychatServer/build/CMakeFiles/edit_cache.dir
+/home/seohyun/mychat/MychatServer/build/CMakeFiles/rebuild_cache.dir

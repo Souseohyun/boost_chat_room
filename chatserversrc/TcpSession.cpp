@@ -34,7 +34,6 @@ void TcpSession::InitImageTcpSession(){
     std::cout<<"class TcpSession for ImageTcpSession init"<<std::endl;
     //在客户端中，只有完成ChatTcpSession的LoginAuthen()验证才能初始化图像Session
     //故不再验证身份，直接开始监听并完善http逻辑
-    //此处shi山代码，逻辑层次不分明，将图像监听放在了ImageSession中，有缘再来改正
     ImageListeningFromCli();
 
 }
@@ -95,8 +94,7 @@ void TcpSession::ParseAuthentication(std::string &usrname,std::string& pasword)
             //this->pChatSess_->PushMessege("验证通过，登陆成功\n");
             std::cout<<"Autn Success"<<std::endl;
 
-            //查询用户在数据库中其他标志信息，准备发挥客户端加以利用
-
+            
             //查询该username对应的user_id
             //select f_user_id from t_user where f_username = 'happycat';
             
@@ -107,13 +105,22 @@ void TcpSession::ParseAuthentication(std::string &usrname,std::string& pasword)
             std::visit([this](auto&& value) {
                 using T = std::decay_t<decltype(value)>;
                 if constexpr (std::is_same_v<T, int>) {
-                // 处理 int 类型的结果
-                SendLoginResponse(true,value);
+                // 处理value为 int 类型的结果
+                // 进一步获取该value为id的用户的 好友信息
+                std::vector<FriendInfo> friends = chatServer_.GetMysql().GetFriends(value);
+                // 发送登录响应和好友信息
+                for(const auto& a:friends){
+                    std::cout<<"_DEBUG_FOR_GETFRIENDS"<<"\n"<<
+                               a.friend_id<<" "<<a.teamname<<" "<<a.markname<<std::endl;
+                }
+                SendLoginResponse(true, value, friends);
+                // 通知身份验证成功
+                NotifyAuthenticationSuccess(value); 
                 } else if constexpr (std::is_same_v<T, std::string>) {
-                // 处理 string 类型的结果
+                // 处理 string 类型的结果(不可能)
                 std::cerr<<"variant visit error"<<std::endl;
                 }
-                // 处理其他类型
+                // 处理其他类型(不可能)
             }, result_id);
             
 
@@ -128,6 +135,38 @@ void TcpSession::ParseAuthentication(std::string &usrname,std::string& pasword)
     
 }
 
+void TcpSession::SendLoginResponse(bool bLogin, int& user_id, const std::vector<FriendInfo>& friends) {
+    nlohmann::json response;
+    response["login_success"] = bLogin;
+    if (bLogin) {
+        response["message"] = "Authentication successful.";
+        response["user_id"] = user_id;
+
+        // 添加好友信息（这是一个安全隐患，如果用户使用量大，他的好友量很多，可能这样传输会出问题，需要分段）
+        nlohmann::json jsonFriends = nlohmann::json::array();
+        for (const auto& friendInfo : friends) {
+            nlohmann::json jsonFriend;
+            jsonFriend["friend_id"] = friendInfo.friend_id;
+            jsonFriend["teamname"] = friendInfo.teamname;
+            jsonFriend["markname"] = friendInfo.markname;
+            jsonFriends.push_back(jsonFriend);
+        }
+        response["friends"] = jsonFriends;
+    } else {
+        response["message"] = "Authentication failed. Check username or password.";
+    }
+
+    // 将 JSON 对象转换为字符串并发送响应
+    std::string responseStr = response.dump();
+    std::cout<<responseStr<<std::endl;
+    SendDataPacket(responseStr);
+
+    // 启动监听
+    ListeningFromCli();
+}
+
+
+/* log 2024.1.7 16:04
 void TcpSession::SendLoginResponse(bool bLogin,int& user_id){
     nlohmann::json response;
         response["login_success"] = bLogin;
@@ -149,14 +188,32 @@ void TcpSession::SendLoginResponse(bool bLogin,int& user_id){
         // 发送响应
         SendDataPacket(responseStr);
 
+        
         //启动监听
         ListeningFromCli();
+}
+*/
+
+
+
+
+void TcpSession::SetOnAuthenticatedCallback(const std::function<void(int)>& callback) {
+    onAuthenticatedCallback_ = callback;
+    
+}
+
+//当验证成功时，唤醒对应回调函数
+void TcpSession::NotifyAuthenticationSuccess(int userId) {
+    userId_ = userId;
+    if (onAuthenticatedCallback_) {
+        onAuthenticatedCallback_(userId);
+    }
 }
 
 //方便imagesession使用mysql
 BoostMysql& TcpSession::UseImageMysql()
 {
-    //权宜之计，此处写死传入string，将来需要重构，与ImageSession逻辑接洽
+    
     //return imageServer_.GetMysql().ExecSql<std::string>(sql);
     return imageServer_.GetMysql();
 }
@@ -199,6 +256,8 @@ void TcpSession::ListenHandle(const boost::system::error_code& ec,std::size_t by
             if (type == "message_text") {
                 //如果是文字信息，交付给chatSession处理
                 std::cout<<data<<std::endl;
+                //收到之后，我们在这个函数中拿到dest，src，发给对应的客户端
+                //现在当务之急是：编写一个函数，通过dest发给对应客户端
                 pChatSess_->ChatSessionStart(data);
 
             } else if (type == "message_image") {
@@ -231,7 +290,8 @@ void TcpSession::SendDataPacket(const std::string &data)
             if (!ec) {
                 // 数据发送成功
                 // 可以在这里进行一些处理
-                std::cout<<"send success: "<<package<<std::endl;
+                std::cout<<"send success: "<<std::endl;
+
             } else {
                 // 错误处理
                 //如果因为keepalive机制检测eof断连
@@ -262,20 +322,39 @@ void TcpSession::ImageListeningFromCli(){
 
 void TcpSession::ImageListenHandle(const boost::system::error_code &ec, std::size_t bytes)
 {
+    
     auto self = shared_from_this();
     if(!ec){
         std::istream stream(&streamBuff_);
         std::string request((std::istreambuf_iterator<char>(stream)), std::istreambuf_iterator<char>());
         // 请求处理逻辑
         //若客户端发来的是HTTP GET命令，路径为/download请求
-        if (request.find("GET /download") != std::string::npos) {
-            self->pImageSess_->ImageSessionDownload(request);
 
+        //debug--
+        std::cout<<"into ImageListenHandle"<<std::endl;
+        //std::cout<<request<<std::endl;
+        if (request.find("GET /download") != std::string::npos) {
+            std::cout<<"it's Get download"<<std::endl;
+            self->pImageSess_->ImageSessionDownload(request);
+            
             //继续监听图片请求
             ImageListeningFromCli();
+        }else if (request.find("GET /getAllImages") != std::string::npos){
+            std::cout<<"it's Get getAllImages"<<std::endl;
+            self->pImageSess_->HandleAllImagesRequest(request);
         }
     }
 
+}
+
+int TcpSession::GetUserId() const
+{
+    return this->userId_;
+}
+
+ChatServer &TcpSession::GetServer() const
+{
+    return this->chatServer_;
 }
 
 void TcpSession::ClearStreambuf()

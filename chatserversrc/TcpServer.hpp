@@ -37,6 +37,9 @@ protected:
     //session list
     std::list<std::shared_ptr<TcpSession>> sessionList_;
 
+    //id与session的映射关系hash map
+    std::unordered_map<int, std::weak_ptr<TcpSession>> idToSessionMap_;
+
 private:
     //单独开辟一个线程用于接客，不妨碍其他逻辑
     std::thread                             tcpServThread_;
@@ -69,6 +72,11 @@ public:
     void RemoveSession(const std::shared_ptr<TcpSession>& session);
     void DoBrocastMessage(const std::string&,const TcpSession*);
 
+    //用于配合id-session hash map
+    void RegisterSession(int userId, std::shared_ptr<TcpSession> session);
+    void UnregisterSession(int userId);
+    std::shared_ptr<TcpSession> GetSessionById(int userId);
+    
 private:
     void StartHeartbeat();
     void CheckHeartbeat();
