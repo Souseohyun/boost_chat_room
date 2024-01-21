@@ -113,6 +113,7 @@ void TcpSession::ParseAuthentication(std::string &usrname,std::string& pasword)
                     std::cout<<"_DEBUG_FOR_GETFRIENDS"<<"\n"<<
                                a.friend_id<<" "<<a.teamname<<" "<<a.markname<<std::endl;
                 }
+                
                 SendLoginResponse(true, value, friends);
                 // 通知身份验证成功
                 NotifyAuthenticationSuccess(value); 

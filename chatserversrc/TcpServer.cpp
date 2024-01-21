@@ -90,17 +90,17 @@ void TcpServer::StartAccept(){
             if(!ec){
                 std::cout<<"into async_accept"<<std::endl;
                 std::shared_ptr<TcpSession> pTcpSess;
-                
-                
-                
+
                 if(this->GetType() == "ChatServer"){
                     pTcpSess = std::make_shared<TcpSession>(socket, GetChatServRef());
                     //回调函数为注册session到map中
                     pTcpSess->SetOnAuthenticatedCallback([this,&pTcpSess](int userId) {
                     RegisterSession(userId, pTcpSess);
                     });
-std::cout<<"after RegisterSession"<<std::endl;
+                    std::cout<<"after RegisterSession"<<std::endl;
                     pTcpSess->IintChatTcpSession(); 
+
+
                 } else if(this->GetType() == "ImageServer"){
                     pTcpSess = std::make_shared<TcpSession>(socket, GetImageServRef());
                     pTcpSess->InitImageTcpSession();
@@ -139,7 +139,7 @@ void TcpServer::DoBrocastMessage(const std::string &msg,const TcpSession* sender
     }
 }
 
-//hash map 三函数
+// map 三函数
 void TcpServer::RegisterSession(int userId, std::shared_ptr<TcpSession> session) {
     std::lock_guard<std::mutex> lock(tcpMutex_);
     idToSessionMap_[userId] = session;

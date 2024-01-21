@@ -74,7 +74,7 @@ bool BoostMysql::CheckUserInfo(std::string &usr, std::string &pass)
     return false; 
 }
 
-
+//std::any
 SqlResult BoostMysql::ExecSql(const std::string &sql)
 {
     
